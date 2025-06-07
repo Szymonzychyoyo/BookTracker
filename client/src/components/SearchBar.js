@@ -1,25 +1,25 @@
-// client/src/components/SearchBar.js
 import React, { useState } from 'react';
+import styles from './SearchBar.module.css';
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    if (query.trim() === '') return;
+    if (!query.trim()) return;
     onSearch(query.trim());
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: '1rem' }}>
+    <form className={styles.searchForm} onSubmit={handleSubmit}>
       <input
+        className={styles.searchInput}
         type="text"
         value={query}
         placeholder="Wpisz tytuł książki..."
-        onChange={(e) => setQuery(e.target.value)}
-        style={{ padding: '0.5rem', width: '300px' }}
+        onChange={e => setQuery(e.target.value)}
       />
-      <button type="submit" style={{ padding: '0.5rem 1rem', marginLeft: '0.5rem' }}>
+      <button className={styles.searchButton} type="submit">
         Szukaj
       </button>
     </form>
