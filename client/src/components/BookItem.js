@@ -1,16 +1,18 @@
-import React from 'react';
-import styles from './BookItem.module.css';
+import React from "react";
+import styles from "./BookItem.module.css";
 
 const BookItem = ({ bookData, onAddToRead, onAddRead }) => {
   const title = bookData.title;
-  const author = Array.isArray(bookData.author_name) ? bookData.author_name[0] : 'Brak autora';
+  const author = Array.isArray(bookData.author_name)
+    ? bookData.author_name[0]
+    : "Brak autora";
   const coverId = bookData.cover_i;
   const openLibraryId = bookData.key;
   const authorKeyList = bookData.author_key || [];
 
   const coverUrl = coverId
     ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`
-    : 'https://via.placeholder.com/100x150?text=Brak+okładki';
+    : "https://via.placeholder.com/100x150?text=Brak+okładki";
 
   return (
     <div className={styles.item}>
@@ -23,7 +25,14 @@ const BookItem = ({ bookData, onAddToRead, onAddRead }) => {
         <button
           className={styles.button}
           onClick={() =>
-            onAddToRead({ title, author, openLibraryId, coverId, authorKey: authorKeyList, status: 'to-read' })
+            onAddToRead({
+              title,
+              author,
+              openLibraryId,
+              coverId,
+              authorKey: authorKeyList,
+              status: "to-read",
+            })
           }
         >
           Dodaj jako do przeczytania
@@ -31,7 +40,14 @@ const BookItem = ({ bookData, onAddToRead, onAddRead }) => {
         <button
           className={styles.button}
           onClick={() =>
-            onAddRead({ title, author, openLibraryId, coverId, authorKey: authorKeyList, status: 'read' })
+            onAddRead({
+              title,
+              author,
+              openLibraryId,
+              coverId,
+              authorKey: authorKeyList,
+              status: "read",
+            })
           }
         >
           Dodaj jako przeczytana
