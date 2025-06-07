@@ -1,0 +1,64 @@
+# -----------------------------
+#  Node.js
+# -----------------------------
+
+# Ignoruj katalogi node_modules w całym projekcie
+node_modules/
+
+# Ignoruj pliki środowiskowe
+.env
+.env.*
+# (np. .env.local, .env.development, .env.production itp.)
+
+# Ignoruj pliki logów
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Ignoruj buildy (jeśli generujesz np. folder build/ lub dist/)
+dist/
+build/
+
+# Ignoruj pliki tymczasowe edytorów/IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# -----------------------------
+#  System operacyjny
+# -----------------------------
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# -----------------------------
+#  Inne
+# -----------------------------
+# Ignoruj pliki obrazków tymczasowych
+*.png~
+*.jpg~
+*.jpeg~
+
+# Ignoruj folder coverage (jeśli robisz testy i raporty pokrycia kodu)
+coverage/
+
+# Ignoruj folder cache
+.cache/
+
+# Ignoruj pliki lock specifc do CI/CD (jeśli nie chcesz ich commitować)
+# np. pamiętaj, że package-lock.json czy yarn.lock warto raczej trzymać w repo,
+# ale jeśli z jakiegoś powodu chcesz je pominąć, odkomentuj poniższe:
+# package-lock.json
+# yarn.lock
