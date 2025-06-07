@@ -1,7 +1,14 @@
+// client/src/components/BookItem.js
 import React from "react";
 import styles from "./BookItem.module.css";
 
-const BookItem = ({ bookData, onAddToRead, onAddRead }) => {
+const BookItem = ({
+  bookData,
+  isAdded,
+  onAddToRead,
+  onAddRead,
+  onRemove
+}) => {
   const title = bookData.title;
   const author = Array.isArray(bookData.author_name)
     ? bookData.author_name[0]
@@ -16,42 +23,57 @@ const BookItem = ({ bookData, onAddToRead, onAddRead }) => {
 
   return (
     <div className={styles.item}>
-      <img className={styles.cover} src={coverUrl} alt={`Okładka ${title}`} />
+      <img
+        className={styles.cover}
+        src={coverUrl}
+        alt={`Okładka ${title}`}
+      />
       <div className={styles.info}>
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.author}>Autor: {author}</p>
       </div>
       <div className={styles.buttons}>
-        <button
-          className={styles.button}
-          onClick={() =>
-            onAddToRead({
-              title,
-              author,
-              openLibraryId,
-              coverId,
-              authorKey: authorKeyList,
-              status: "to-read",
-            })
-          }
-        >
-          Dodaj jako do przeczytania
-        </button>
-        <button
-          className={styles.button}
-          onClick={() =>
-            onAddRead({
-              title,
-              author,
-              openLibraryId,
-              coverId,
-              authorKey: authorKeyList,
-              status: "read",
-            })
-          }
-        >
-          Dodaj jako przeczytana
-        </button>
+        {!isAdded ? (
+          <>
+            <button
+              className={styles.button}
+              onClick={() =>
+                onAddToRead({
+                  title,
+                  author,
+                  openLibraryId,
+                  coverId,
+                  authorKey: authorKeyList,
+                  status: "to-read"
+                })
+              }
+            >
+              Dodaj jako do przeczytania
+            </button>
+            <button
+              className={styles.button}
+              onClick={() =>
+                onAddRead({
+                  title,
+                  author,
+                  openLibraryId,
+                  coverId,
+                  authorKey: authorKeyList,
+                  status: "read"
+                })
+              }
+            >
+              Dodaj jako przeczytana
+            </button>
+          </>
+        ) : (
+          <button
+            className={styles.button}
+            onClick={() => onRemove(openLibraryId)}
+          >
+            Usuń z biblioteki
+          </button>
+        )}
       </div>
     </div>
   );
