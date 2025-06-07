@@ -1,59 +1,99 @@
 // client/src/App.js
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import SearchBar from './components/SearchBar';
-import SearchResults from './components/SearchResults';
-import Library from './components/Library';
-import { searchBooksOpenLibrary } from './api/openLibraryAPI';
-import { addBook, deleteBook } from './api/bookAPI';
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  useSearchParams,
+  Link,
+} from "react-router-dom";
+import "./App.css";
+import SearchBar from "./components/SearchBar";
+import SearchResults from "./components/SearchResults";
+import Library from "./components/Library";
+import { searchBooksOpenLibrary } from "./api/openLibraryAPI";
+import { addBook, getAllBooks, deleteBook } from "./api/bookAPI";
 
-function App() {
-  const [results, setResults] = useState([]);
-  const [library, setLibrary] = useState([]);      // stan Twojej biblioteki
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  // Pobierz bibliotekę przy starcie, aby wiedzieć które książki są już dodane
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch('/api/books');
-        const data = await res.json();
-        setLibrary(data);
-      } catch (err) {
-        console.error('Nie udało się załadować biblioteki', err);
-      }
-    })();
-  }, []);
-
-  // Szukanie w Open Library
-  const handleSearch = async (query) => {
-    setLoading(true);
-    setError('');
-    try {
-      const data = await searchBooksOpenLibrary(query);
-      setResults(data);
-    } catch {
-      setError('Nie udało się pobrać wyników.');
-    } finally {
-      setLoading(false);
-    }
+const HomePage = ({ library, onAdd, onRemove, onToggleStatus }) => {
+  const navigate = useNavigate();
+  const handleSearch = (query) => {
+    navigate(`/search?q=${encodeURIComponent(query)}`);
   };
 
-  // Dodawanie do biblioteki
+  return (
+    <div>
+      <SearchBar onSearch={handleSearch} />
+      <Library
+        library={library}
+        onRemove={onRemove}
+        onToggleStatus={onToggleStatus}
+      />
+    </div>
+  );
+};
+
+const SearchPage = ({ library, onAdd, onRemove }) => {
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const q = searchParams.get("q") || "";
+
+  useEffect(() => {
+    if (!q) return;
+    setLoading(true);
+    setError("");
+    searchBooksOpenLibrary(q)
+      .then((data) => setResults(data))
+      .catch(() => setError("Nie udało się pobrać wyników."))
+      .finally(() => setLoading(false));
+  }, [q]);
+
+  const handleSearch = (query) => {
+    setSearchParams({ q: query });
+  };
+
+  return (
+    <div>
+      <SearchBar onSearch={handleSearch} initialValue={q} />
+      <SearchResults
+        results={results}
+        library={library}
+        onAddToRead={(book) => onAdd({ ...book, status: "to-read" })}
+        onAddRead={(book) => onAdd({ ...book, status: "read" })}
+        onRemove={onRemove}
+        loading={loading}
+        error={error}
+      />
+    </div>
+  );
+};
+
+function App() {
+  const [library, setLibrary] = useState([]);
+
+  useEffect(() => {
+    getAllBooks()
+      .then((data) => setLibrary(data))
+      .catch(() => console.error("Nie udało się załadować biblioteki"));
+  }, []);
+
   const handleAdd = async (bookData) => {
     try {
       const added = await addBook(bookData);
       setLibrary((prev) => [...prev, added]);
-      alert(`Dodano: ${added.title} jako ${added.status === 'read' ? 'przeczytaną' : 'do przeczytania'}.`);
+      alert(
+        `Dodano: ${added.title} jako ${
+          added.status === "read" ? "przeczytaną" : "do przeczytania"
+        }.`
+      );
     } catch {
-      alert('Błąd podczas dodawania książki.');
+      alert("Błąd podczas dodawania książki.");
     }
   };
 
-  // Usuwanie z biblioteki (również z backendu)
   const handleRemove = async (openLibraryId) => {
-    // znajdź dokument w bibliotece
     const book = library.find((b) => b.openLibraryId === openLibraryId);
     if (!book) return;
     if (!window.confirm(`Usunąć "${book.title}" z biblioteki?`)) return;
@@ -62,28 +102,47 @@ function App() {
       setLibrary((prev) => prev.filter((b) => b._id !== book._id));
       alert(`Usunięto: ${book.title}`);
     } catch {
-      alert('Błąd podczas usuwania książki.');
+      alert("Błąd podczas usuwania książki.");
     }
   };
 
+  const handleToggleStatus = () => {
+    // implementacja ewentualnej zmiany statusu
+  };
+
   return (
-    <div className="App">
-      <h1>Moja Biblioteka</h1>
-
-      <SearchBar onSearch={handleSearch} />
-
-      <SearchResults
-        results={results}
-        library={library}
-        onAddToRead={(book) => handleAdd({ ...book, status: 'to-read' })}
-        onAddRead={(book) => handleAdd({ ...book, status: 'read' })}
-        onRemove={handleRemove}
-        loading={loading}
-        error={error}
-      />
-
-      <Library />
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <h1>
+          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+            Moja Biblioteka
+          </Link>
+        </h1>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage
+                library={library}
+                onAdd={handleAdd}
+                onRemove={handleRemove}
+                onToggleStatus={handleToggleStatus}
+              />
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <SearchPage
+                library={library}
+                onAdd={handleAdd}
+                onRemove={handleRemove}
+              />
+            }
+          />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
