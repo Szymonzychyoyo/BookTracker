@@ -1,26 +1,48 @@
 // client/src/App.js
-import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import React from "react";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
-import HomePage from './pages/HomePage';
-import SearchPage from './pages/SearchPage';
-import Login from './components/Login';
-import Register from './components/Register';
-import ProtectedRoute from './components/ProtectedRoute';
+import HomePage from "./pages/HomePage";
+import SearchPage from "./pages/SearchPage";
+import SettingsPage from "./pages/SettingsPage";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-import './App.css';
+import "./App.css";
 
 const Header = () => {
   const { user, logout } = useAuth();
   return (
-    <header className="App-header">
-      <Link to="/" className="App-title">Moja Biblioteka</Link>
-      {user ? (
-        <button onClick={logout} style={{ marginLeft: 'auto' }}>Wyloguj</button>
-      ) : (
-        <Link to="/login" style={{ marginLeft: 'auto' }}>Logowanie</Link>
-      )}
+    <header
+      className="App-header"
+      style={{ display: "flex", alignItems: "center" }}
+    >
+      <Link to="/" className="App-title">
+        Moja Biblioteka
+      </Link>
+
+      <nav
+        style={{
+          marginLeft: "auto",
+          display: "flex",
+          gap: "1rem",
+          alignItems: "center",
+        }}
+      >
+        {user ? (
+          <>
+            <Link to="/settings">Ustawienia</Link>
+            <button onClick={logout}>Wyloguj</button>
+          </>
+        ) : (
+          <>
+            <Link to="/login">Logowanie</Link>
+            <Link to="/register">Rejestracja</Link>
+          </>
+        )}
+      </nav>
     </header>
   );
 };
@@ -31,19 +53,21 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route
-            path="/register"
-            element={<Register />}
-          />
-          <Route
-            path="/login"
-            element={<Login />}
-          />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
           <Route
             path="/"
             element={
               <ProtectedRoute>
                 <HomePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <SettingsPage />
               </ProtectedRoute>
             }
           />
