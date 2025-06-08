@@ -28,6 +28,7 @@ const register = async (req, res) => {
       username: user.username,
       email: user.email,
       token: generateToken(user._id),
+      profileImage: user.profileImage || null
     });
   } else {
     res.status(400).json({ message: 'Nieprawidłowe dane użytkownika' });
@@ -46,6 +47,7 @@ const login = async (req, res) => {
       username: user.username,
       email: user.email,
       token: generateToken(user._id),
+      profileImage: user.profileImage || null
     });
   } else {
     res.status(401).json({ message: 'Nieprawidłowe dane logowania' });
@@ -62,48 +64,65 @@ const updateProfile = async (req, res) => {
 
     const { username, oldPassword, newPassword, confirmPassword } = req.body;
 
-    // 1) zmiana loginu
+    // zmiana loginu
     if (username) {
       user.username = username.trim();
     }
 
-    // 2) zmiana hasła (jeśli którykolwiek z pól hasła jest podany)
+    // zmiana hasła
     if (oldPassword || newPassword || confirmPassword) {
-      // muszą być wszystkie trzy
       if (!oldPassword || !newPassword || !confirmPassword) {
         return res.status(400).json({
           message: 'Aby zmienić hasło, podaj stare hasło, nowe hasło i potwierdzenie'
         });
       }
-      // nowe i potwierdzenie muszą się zgadzać
       if (newPassword !== confirmPassword) {
         return res.status(400).json({
           message: 'Nowe hasło i jego potwierdzenie nie są zgodne'
         });
       }
-      // weryfikacja starego hasła
       const isMatch = await user.matchPassword(oldPassword);
       if (!isMatch) {
         return res.status(401).json({ message: 'Stare hasło jest nieprawidłowe' });
       }
-      // wszystko OK → ustaw nowe hasło
-      user.password = newPassword; // zostanie zahashowane w pre('save')
+      user.password = newPassword; // zahashuje się w pre('save')
     }
 
-    // zapisz zmiany
     await user.save();
 
-    // wygeneruj nowy token
+    // nowy token
     const token = generateToken(user._id);
     res.json({
       _id: user._id,
       username: user.username,
       email: user.email,
       token,
-      message: 'Profil zaktualizowany',
+      profileImage: user.profileImage || null,
+      message: 'Profil zaktualizowany'
     });
   } catch (error) {
     console.error('Błąd podczas aktualizacji profilu:', error.message);
+    res.status(500).json({ message: 'Wewnętrzny błąd serwera' });
+  }
+};
+
+// @desc    Zaktualizuj avatar użytkownika
+// @route   PUT /api/auth/profile/avatar
+// @access  Private
+const updateAvatar = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Brak pliku avatar' });
+    }
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'Użytkownik nie znaleziony' });
+    }
+    user.profileImage = `/uploads/avatars/${req.file.filename}`;
+    await user.save();
+    res.json({ profileImage: user.profileImage });
+  } catch (error) {
+    console.error('Błąd podczas uploadu avatara:', error.message);
     res.status(500).json({ message: 'Wewnętrzny błąd serwera' });
   }
 };
@@ -127,5 +146,6 @@ module.exports = {
   register,
   login,
   updateProfile,
+  updateAvatar,
   deleteProfile,
 };

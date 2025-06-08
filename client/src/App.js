@@ -17,7 +17,7 @@ const Header = () => {
   return (
     <header
       className="App-header"
-      style={{ display: "flex", alignItems: "center" }}
+      style={{ display: "flex", alignItems: "center", padding: "0.5rem 1rem" }}
     >
       <Link to="/" className="App-title">
         Moja Biblioteka
@@ -33,6 +33,21 @@ const Header = () => {
       >
         {user ? (
           <>
+            {user.profileImage && (
+              <img
+                src={`http://localhost:5001${user.profileImage}`}
+                alt="Avatar"
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
+              />
+            )}
+            {/* Tu wyświetlamy login obok avatara */}
+            <span style={{ fontWeight: "bold" }}>{user.username}</span>
+
             <Link to="/settings">Ustawienia</Link>
             <button onClick={logout}>Wyloguj</button>
           </>
@@ -80,7 +95,7 @@ function App() {
             }
           />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter>{" "}
     </AuthProvider>
   );
 }

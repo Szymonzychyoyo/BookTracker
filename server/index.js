@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const path = require('path');
 
 dotenv.config();
 connectDB();
@@ -21,6 +22,8 @@ app.use('/api/openlibrary', openLibraryRoutes);
 
 const bookRoutes = require('./routes/bookRoutes');
 app.use('/api/books', bookRoutes);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {

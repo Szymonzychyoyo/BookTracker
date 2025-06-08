@@ -20,3 +20,15 @@ export const deleteAccount = async () => {
   const { data } = await api.delete('/auth/profile');
   return data;
 };
+
+/**
+ * Uploadowanie avatara – przekazujemy `File` w polu `avatar`
+ */
+export const uploadAvatar = async (file) => {
+  const formData = new FormData();
+  formData.append('avatar', file);
+  const { data } = await api.put('/auth/profile/avatar', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+  return data; // { profileImage: "/uploads/avatars/..." }
+};

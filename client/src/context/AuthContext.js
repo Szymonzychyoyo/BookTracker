@@ -7,10 +7,10 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
-    if (token && user) {
+    const stored = localStorage.getItem("user");
+    if (token && stored) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      return JSON.parse(user);
+      return JSON.parse(stored);
     }
     return null;
   });
@@ -29,8 +29,17 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // aktualizuje tylko pola w user (np. profileImage)
+  const updateUser = (fields) => {
+    setUser((prev) => {
+      const updated = { ...prev, ...fields };
+      localStorage.setItem("user", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
