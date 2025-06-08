@@ -1,0 +1,51 @@
+// client/src/components/Login.js
+import React, { useState } from 'react';
+import { loginUser } from '../api/authAPI';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate, Link } from 'react-router-dom';
+
+const Login = () => {
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleChange = e => {
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    setError('');
+    try {
+      const data = await loginUser(form);
+      login(data);
+      navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Logowanie nieudane');
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: 400, margin: '2rem auto' }}>
+      <h2>Logowanie</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Email:</label>
+          <input name="email" type="email" value={form.email} onChange={handleChange} required />
+        </div>
+        <div>
+          <label>Hasło:</label>
+          <input name="password" type="password" value={form.password} onChange={handleChange} required />
+        </div>
+        <button type="submit">Zaloguj się</button>
+      </form>
+      <p>
+        Nie masz konta? <Link to="/register">Zarejestruj się</Link>
+      </p>
+    </div>
+  );
+};
+
+export default Login;

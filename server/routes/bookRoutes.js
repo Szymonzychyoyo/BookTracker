@@ -1,6 +1,7 @@
 // server/routes/bookRoutes.js
 const express = require("express");
 const router = express.Router();
+const { protect } = require('../middlewares/authMiddleware');
 const {
   getAllBooks,
   createBook,
@@ -9,15 +10,15 @@ const {
 } = require("../controllers/bookController");
 
 // GET    /api/books        → pobierz wszystkie książki
-router.get("/", getAllBooks);
+router.get("/", protect, getAllBooks);
 
 // POST   /api/books        → dodaj nową książkę
-router.post("/", createBook);
+router.post("/", protect, createBook);
 
 // PATCH  /api/books/:id    → zaktualizuj status książki
-router.patch("/:id", updateBookStatus);
+router.patch("/:id", protect, updateBookStatus);
 
 // DELETE /api/books/:id    → usuń książkę
-router.delete("/:id", deleteBook);
+router.delete("/:id", protect, deleteBook);
 
 module.exports = router;

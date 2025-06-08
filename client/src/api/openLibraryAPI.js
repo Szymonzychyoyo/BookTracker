@@ -1,18 +1,20 @@
-// client/src/api/openLibraryAPI.js
 import axios from 'axios';
 
-/**
- * Wysyła zapytanie do naszego backendu:
- * GET /api/openlibrary/search?q=<query>
- * Zwraca tablicę książek (danych z Open Library).
- */
+const API_BASE = 'http://localhost:5001/api';
+const api = axios.create({ baseURL: API_BASE });
+
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export const searchBooksOpenLibrary = async (query) => {
-  try {
-    // dzięki ustawionemu proxy w package.json wysyłamy zapytanie do /api/openlibrary/...
-    const response = await axios.get(`/api/openlibrary/search?q=${encodeURIComponent(query)}`);
-    return response.data; // tablica obiektów z Open Library
-  } catch (error) {
-    console.error('Błąd podczas wyszukiwania w OpenLibrary:', error);
-    throw error;
-  }
+  const { data } = await api.get(`/openlibrary/search?q=${encodeURIComponent(query)}`);
+  return data;
 };

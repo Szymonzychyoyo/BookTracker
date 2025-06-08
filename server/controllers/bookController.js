@@ -1,12 +1,14 @@
 // server/controllers/bookController.js
 const Book = require("../models/Book");
 
-// @desc    Pobierz wszystkie książki
+// @desc    Pobierz wszystkie książki zalogowanego użytkownika
 // @route   GET /api/books
-// @access  Public (na razie, bez autoryzacji)
+// @access  Private
 const getAllBooks = async (req, res) => {
   try {
-    const books = await Book.find().sort({ createdAt: -1 });
+    const books = await Book.find({ owner: req.user._id }).sort({
+      createdAt: -1,
+    });
     res.json(books);
   } catch (error) {
     console.error("Błąd podczas pobierania książek:", error.message);
@@ -14,9 +16,9 @@ const getAllBooks = async (req, res) => {
   }
 };
 
-// @desc    Dodaj nową książkę (z opcjonalnymi danymi z Open Library)
+// @desc    Dodaj nową książkę
 // @route   POST /api/books
-// @access  Public (na razie)
+// @access  Private
 const createBook = async (req, res) => {
   try {
     const {
@@ -39,7 +41,9 @@ const createBook = async (req, res) => {
       coverId,
       authorKey,
       status,
+      owner: req.user._id,
     });
+
     const savedBook = await newBook.save();
     res.status(201).json(savedBook);
   } catch (error) {
@@ -50,18 +54,27 @@ const createBook = async (req, res) => {
 
 // @desc    Zaktualizuj status książki (to-read ↔ read)
 // @route   PATCH /api/books/:id
-// @access  Public (na razie, bez autoryzacji)
+// @access  Private
 const updateBookStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
+
     if (!["to-read", "read"].includes(status)) {
       return res.status(400).json({ message: "Nieprawidłowy status książki" });
     }
+
     const book = await Book.findById(id);
-    if (!book) {
+    console.log("🔍 updateBookStatus:", {
+      id,
+      owner: book?.owner,
+      user: req.user._id,
+    });
+
+    if (!book || !book.owner.equals(req.user._id)) {
       return res.status(404).json({ message: "Książka nie znaleziona" });
     }
+
     book.status = status;
     const updatedBook = await book.save();
     res.json(updatedBook);
@@ -73,14 +86,23 @@ const updateBookStatus = async (req, res) => {
 
 // @desc    Usuń książkę
 // @route   DELETE /api/books/:id
-// @access  Public (na razie, bez autoryzacji)
+// @access  Private
 const deleteBook = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await Book.findByIdAndDelete(id);
+
+    // szukamy i usuwamy w jednym kroku, tylko dla zalogowanego właściciela
+    const deleted = await Book.findOneAndDelete({
+      _id: id,
+      owner: req.user._id,
+    });
+
+    console.log("🔍 deleteBook:", { id, user: req.user._id, deleted });
+
     if (!deleted) {
       return res.status(404).json({ message: "Książka nie znaleziona" });
     }
+
     res.json({ message: "Książka usunięta" });
   } catch (error) {
     console.error("Błąd podczas usuwania książki:", error.message);

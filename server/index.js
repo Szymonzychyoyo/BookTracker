@@ -1,8 +1,8 @@
 // server/index.js
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const connectDB = require("./config/db");
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const connectDB = require('./config/db');
 
 dotenv.config();
 connectDB();
@@ -11,17 +11,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Trasy dla Open Library (zewnętrzne API)
-const openLibraryRoutes = require("./routes/openLibraryRoutes");
-app.use("/api/openlibrary", openLibraryRoutes);
+// --- DODAJ TO: ---
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
+// --- KONIEC DODATKU ---
 
-// ←––––––––––– tutaj dodajemy trasy dla Books –––––––––––→
-const bookRoutes = require("./routes/bookRoutes");
-app.use("/api/books", bookRoutes);
+const openLibraryRoutes = require('./routes/openLibraryRoutes');
+app.use('/api/openlibrary', openLibraryRoutes);
 
-// ---------------------------------------------
+const bookRoutes = require('./routes/bookRoutes');
+app.use('/api/books', bookRoutes);
 
-const PORT = process.env.PORT || 5001; // upewnij się, że to jest 5001 (albo 5000, jeśli wróciłeś do 5000)
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`🚀 Serwer działa na porcie ${PORT}`);
 });

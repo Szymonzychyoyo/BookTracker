@@ -29,6 +29,11 @@ const bookSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    owner: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: 'User',
+     required: true
+   },
     status: {
       type: String,
       enum: ['to-read', 'read'],

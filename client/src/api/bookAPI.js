@@ -1,44 +1,36 @@
-// client/src/api/bookAPI.js
 import axios from 'axios';
 
-/**
- * Dodaje nową książkę do naszej bazy (nasz endpoint POST /api/books).
- * @param {Object} bookData – obiekt z polami: title, author, openLibraryId, coverId, authorKey, status
- * @returns – obiekt zapisanej książki
- */
-export const addBook = async (bookData) => {
-  try {
-    const response = await axios.post('/api/books', bookData);
-    return response.data;
-  } catch (error) {
-    console.error('Błąd podczas dodawania książki:', error);
-    throw error;
-  }
-};
+const API_BASE = 'http://localhost:5001/api';
+const api = axios.create({ baseURL: API_BASE });
 
-/**
- * Pobiera wszystkie książki z bazy
- */
+// Dodaj interceptor, który dołącza token do każdego żądania
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 export const getAllBooks = async () => {
-  const { data } = await axios.get('/api/books');
+  const { data } = await api.get('/books');
   return data;
 };
 
-/**
- * Zmienia status książki
- * @param {string} id – _id dokumentu w MongoDB
- * @param {string} status – 'to-read' lub 'read'
- */
+export const addBook = async (bookData) => {
+  const { data } = await api.post('/books', bookData);
+  return data;
+};
+
 export const updateBookStatus = async (id, status) => {
-  const { data } = await axios.patch(`/api/books/${id}`, { status });
+  const { data } = await api.patch(`/books/${id}`, { status });
   return data;
 };
 
-/**
- * Usuwa książkę
- * @param {string} id – _id dokumentu
- */
 export const deleteBook = async (id) => {
-  const { data } = await axios.delete(`/api/books/${id}`);
+  const { data } = await api.delete(`/books/${id}`);
   return data;
 };
