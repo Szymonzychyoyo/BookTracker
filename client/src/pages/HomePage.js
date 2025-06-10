@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import Library from "../components/Library";
 import Modal from "../components/Modal";
+import styles from "./HomePage.module.css";
 import { getAllBooks, deleteBook, updateBookStatus } from "../api/bookAPI";
 import { getWorkDetails } from "../api/openLibraryAPI";
 
@@ -18,24 +19,24 @@ const HomePage = () => {
 
   useEffect(() => {
     getAllBooks()
-      .then(data => setLibrary(data))
-      .catch(err => setError(err.message || "Błąd"))
+      .then((data) => setLibrary(data))
+      .catch((err) => setError(err.message || "Błąd"))
       .finally(() => setLoading(false));
   }, []);
 
-  const handleSearch = q => navigate(`/search?q=${encodeURIComponent(q)}`);
+  const handleSearch = (q) => navigate(`/search?q=${encodeURIComponent(q)}`);
 
-  const toggleStatus = b =>
+  const toggleStatus = (b) =>
     updateBookStatus(b._id, b.status === "to-read" ? "read" : "to-read")
-      .then(u => setLibrary(l => l.map(x => x._id === u._id ? u : x)))
-      .catch(err => alert(err.message));
+      .then((u) => setLibrary((l) => l.map((x) => (x._id === u._id ? u : x))))
+      .catch((err) => alert(err.message));
 
-  const remove = id =>
+  const remove = (id) =>
     deleteBook(id)
-      .then(() => setLibrary(l => l.filter(x => x._id !== id)))
-      .catch(err => alert(err.message));
+      .then(() => setLibrary((l) => l.filter((x) => x._id !== id)))
+      .catch((err) => alert(err.message));
 
-  const showDetails = async b => {
+  const showDetails = async (b) => {
     setSelected(b);
     setModalLoading(true);
     try {
@@ -55,7 +56,7 @@ const HomePage = () => {
     <div>
       <SearchBar onSearch={handleSearch} />
       {loading && <p>Ładowanie biblioteki…</p>}
-      {error && <p style={{ color: "red" }}>Błąd: {error}</p>}
+      {error && <p className={styles.error}>Błąd: {error}</p>}
       {!loading && !error && (
         <Library
           library={library}
@@ -72,9 +73,11 @@ const HomePage = () => {
         <Modal
           onClose={() => setSelected(null)}
           title={selected.title}
-          coverUrl={selected.coverId
-            ? `https://covers.openlibrary.org/b/id/${selected.coverId}-L.jpg`
-            : null}
+          coverUrl={
+            selected.coverId
+              ? `https://covers.openlibrary.org/b/id/${selected.coverId}-L.jpg`
+              : null
+          }
           description={modalLoading ? "Ładowanie opisu…" : desc}
         />
       )}

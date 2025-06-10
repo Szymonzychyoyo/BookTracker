@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { updateProfile, deleteAccount, uploadAvatar } from "../api/authAPI";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import styles from "./SettingsPage.module.css";
 
 const SettingsPage = () => {
   const { user, login, logout, updateUser } = useAuth();
@@ -28,49 +29,31 @@ const SettingsPage = () => {
       setError("");
     } catch (err) {
       console.error("uploadAvatar error", err.response || err);
-      setError(err.response?.data?.message || "Błąd uploadu avatara");
+      setError("Błąd aktualizacji avatara");
     }
   };
 
-  // zapis zmian loginu/hasła
+  // zmiana loginu/hasła
   const handleUpdate = async (e) => {
     e.preventDefault();
     setMsg("");
     setError("");
-
-    // walidacja zmiany hasła
-    if (oldPassword || newPassword || confirmPassword) {
-      if (!oldPassword || !newPassword || !confirmPassword) {
-        setError("Aby zmienić hasło, wypełnij wszystkie pola.");
-        return;
-      }
-      if (newPassword !== confirmPassword) {
-        setError("Nowe hasło i potwierdzenie nie są zgodne.");
-        return;
-      }
+    if (newPassword && newPassword !== confirmPassword) {
+      setError("Hasła nie są takie same");
+      return;
     }
-
     try {
       const res = await updateProfile({
         username,
         oldPassword,
-        newPassword,
-        confirmPassword,
+        newPassword: newPassword || undefined,
       });
-      // odśwież auth state z nowym tokenem i username
-      login({
-        token: res.token,
-        _id: res._id,
-        username: res.username,
-        email: res.email,
-        profileImage: res.profileImage ?? user.profileImage,
-      });
+      updateUser({ username: res.username });
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
       setMsg(res.message);
     } catch (err) {
-      console.error("updateProfile error", err.response || err);
       setError(err.response?.data?.message || "Błąd aktualizacji profilu");
     }
   };
@@ -91,26 +74,20 @@ const SettingsPage = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "2rem auto" }}>
+    <div className={styles.container}>
       <h2>Ustawienia konta</h2>
-      {msg && <p style={{ color: "green" }}>{msg}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {msg && <p className={styles.success}>{msg}</p>}
+      {error && <p className={styles.error}>{error}</p>}
 
       {/* Sekcja avatara */}
-      <div style={{ marginBottom: "1.5rem" }}>
+      <div className={styles.section}>
         <label>Avatar:</label>
         <br />
         {user.profileImage && (
           <img
             src={`http://localhost:5001${user.profileImage}`}
             alt="avatar"
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: "50%",
-              objectFit: "cover",
-              marginBottom: "0.5rem",
-            }}
+            className={styles.avatarImg}
           />
         )}
         <input type="file" accept="image/*" onChange={handleAvatarChange} />
@@ -118,7 +95,7 @@ const SettingsPage = () => {
 
       {/* Formularz login/hasło */}
       <form onSubmit={handleUpdate}>
-        <div style={{ marginBottom: "0.75rem" }}>
+        <div className={styles.field}>
           <label>Login:</label>
           <br />
           <input
@@ -126,29 +103,29 @@ const SettingsPage = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            style={{ width: "100%" }}
+            className={styles.fullWidth}
           />
         </div>
-        <fieldset style={{ marginBottom: "1rem", padding: "0.5rem" }}>
+        <fieldset className={styles.fieldset}>
           <legend>Zmiana hasła</legend>
-          <div style={{ marginBottom: "0.5rem" }}>
+          <div className={styles.field}>
             <label>Stare hasło:</label>
             <br />
             <input
               type="password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
-              style={{ width: "100%" }}
+              className={styles.fullWidth}
             />
           </div>
-          <div style={{ marginBottom: "0.5rem" }}>
+          <div className={styles.field}>
             <label>Nowe hasło:</label>
             <br />
             <input
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              style={{ width: "100%" }}
+              className={styles.fullWidth}
             />
           </div>
           <div>
@@ -158,27 +135,19 @@ const SettingsPage = () => {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              style={{ width: "100%" }}
+              className={styles.fullWidth}
             />
           </div>
         </fieldset>
 
-        <button type="submit" style={{ width: "100%", padding: "0.5rem" }}>
+        <button type="submit" className={styles.submit}>
           Zapisz zmiany
         </button>
       </form>
 
-      <hr style={{ margin: "2rem 0" }} />
+      <hr className={styles.hr} />
 
-      <button
-        onClick={handleDelete}
-        style={{
-          width: "100%",
-          padding: "0.5rem",
-          background: "red",
-          color: "white",
-        }}
-      >
+      <button onClick={handleDelete} className={styles.danger}>
         Usuń konto
       </button>
     </div>

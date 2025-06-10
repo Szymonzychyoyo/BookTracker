@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getAuthorDetails } from "../api/openLibraryAPI";
+import styles from "./AuthorPage.module.css";
 
 const AuthorPage = () => {
   const { authorKey } = useParams();
@@ -28,7 +29,7 @@ const AuthorPage = () => {
   }, [authorKey]);
 
   if (loading) return <p>Ładowanie autora…</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (error) return <p className={styles.error}>{error}</p>;
   if (!author) return null;
 
   // pobierz tekst opisu/autobio
@@ -46,10 +47,10 @@ const AuthorPage = () => {
   const descriptionText = getDescription();
 
   return (
-    <div style={{ padding: "1rem" }}>
+    <div className={styles.container}>
       <h2>{author.name}</h2>
       {descriptionText && (
-        <p style={{ marginBottom: "1.5rem", lineHeight: 1.5 }}>
+        <p className={styles.description}>
           {descriptionText}
         </p>
       )}

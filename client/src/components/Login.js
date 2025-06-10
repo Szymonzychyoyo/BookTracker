@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { loginUser } from '../api/authAPI';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import styles from './Login.module.css';
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -27,9 +28,9 @@ const Login = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '2rem auto' }}>
+    <div className={styles.container}>
       <h2>Logowanie</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className={styles.error}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email:</label>

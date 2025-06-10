@@ -3,10 +3,11 @@
   margin-top: 1rem;
 }
 
+
 .message {
-  color: #555;
+  color: #bbb;
 }
 
 .error {
-  color: red;
+  color: #ff6666;
 }

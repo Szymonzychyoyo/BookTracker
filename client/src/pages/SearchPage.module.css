@@ -1,0 +1,19 @@
+.error {
+  color: #ff6666;
+}
+
+.pagination {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.pageButton {
+  margin: 0 4px;
+  background: #333;
+  color: #eee;
+  border: none;
+}
+
+.active {
+  font-weight: bold;
+}

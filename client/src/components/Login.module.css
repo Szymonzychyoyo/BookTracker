@@ -1,0 +1,12 @@
+.container {
+  max-width: 400px;
+  margin: 2rem auto;
+  background: #1e1e1e;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #eee;
+}
+
+.error {
+  color: #ff6666;
+}

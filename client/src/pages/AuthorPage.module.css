@@ -1,0 +1,13 @@
+.container {
+  padding: 1rem;
+  color: #eee;
+}
+
+.description {
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.error {
+  color: #ff6666;
+}

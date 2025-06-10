@@ -6,10 +6,12 @@
 .item {
   display: flex;
   align-items: center;
-  border: 1px solid #ddd;
+  border: 1px solid #444;
   padding: 0.5rem;
   border-radius: 4px;
   margin-bottom: 0.5rem;
+  background: #1e1e1e;
+  color: #eee;
 }
 
 .coverSmall {
@@ -29,7 +31,7 @@
 
 .status {
   font-style: italic;
-  color: #555;
+  color: #bbb;
 }
 
 .actions {
@@ -41,13 +43,13 @@
 .button {
   padding: 0.25rem 0.5rem;
   border: none;
-  background: #1976d2;
-  color: white;
+  background: #333;
+  color: #eee;
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .button:hover {
-  background: #115293;
+  background: #555;
 }

@@ -1,0 +1,59 @@
+.container {
+  max-width: 400px;
+  margin: 2rem auto;
+  background: #1e1e1e;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #eee;
+}
+
+.success {
+  color: #66ff66;
+}
+
+.error {
+  color: #ff6666;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.avatarImg {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}
+
+.field {
+  margin-bottom: 0.75rem;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.fieldset {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #444;
+}
+
+.submit {
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.danger {
+  width: 100%;
+  padding: 0.5rem;
+  background: red;
+  color: white;
+}
+
+.hr {
+  margin: 2rem 0;
+  border-color: #444;
+}

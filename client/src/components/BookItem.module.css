@@ -3,9 +3,11 @@
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid #444;
   padding: 0.5rem;
   border-radius: 4px;
+  background: #1e1e1e;
+  color: #eee;
 }
 
 .cover {
@@ -27,7 +29,7 @@
 
 .author {
   margin: 0;
-  color: #555;
+  color: #bbb;
 }
 
 .buttons {
@@ -39,13 +41,13 @@
 .button {
   padding: 0.5rem 1rem;
   border: none;
-  background: #1976d2;
-  color: white;
+  background: #333;
+  color: #eee;
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .button:hover {
-  background: #115293;
+  background: #555;
 }
