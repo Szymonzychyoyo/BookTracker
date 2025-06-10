@@ -21,15 +21,15 @@ const SearchResults = ({
   return (
     <div className={styles.results}>
       {results.map(book => {
-        const isAdded = library.some(b => b.openLibraryId === book.key);
+        const entry = library.find(b => b.openLibraryId === book.key);
         return (
           <BookItem
             key={book.key}
             bookData={book}
-            isAdded={isAdded}
+            isAdded={!!entry}
             onAddToRead={onAddToRead}
             onAddRead={onAddRead}
-            onRemove={onRemove}
+            onRemove={entry ? () => onRemove(entry) : undefined}
             onShowDetails={onShowDetails}
           />
         );

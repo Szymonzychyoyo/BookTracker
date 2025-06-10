@@ -58,9 +58,20 @@ const SearchPage = () => {
     }
   };
 
-  const handleAdd = async (book) => {
+  const handleAdd = async (doc) => {
+    const payload = {
+      title: doc.title,
+      author: Array.isArray(doc.author_name)
+        ? doc.author_name[0]
+        : "Brak autora",
+      openLibraryId: doc.key,
+      coverId: doc.cover_i || null,
+      authorKey: doc.author_key || [],
+      status: doc.status || "to-read",
+    };
+
     try {
-      const added = await addBook(book);
+      const added = await addBook(payload);
       setLibrary((l) => [...l, added]);
     } catch (err) {
       alert("Nie udało się dodać książki.");

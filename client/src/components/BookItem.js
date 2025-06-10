@@ -58,10 +58,7 @@ const BookItem = ({
             </button>
           </>
         ) : (
-          <button
-            className={styles.button}
-            onClick={() => onRemove(openLibraryId)}
-          >
+          <button className={styles.button} onClick={onRemove}>
             Usuń z biblioteki
           </button>
         )}
