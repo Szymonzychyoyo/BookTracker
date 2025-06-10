@@ -24,6 +24,7 @@ const bookRoutes = require('./routes/bookRoutes');
 app.use('/api/books', bookRoutes);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/brakOkladki', express.static(path.join(__dirname, 'brakOkladki')));
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {

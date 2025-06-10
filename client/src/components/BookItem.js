@@ -21,7 +21,7 @@ const BookItem = ({
 
   const coverUrl = coverId
     ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`
-    : 'https://via.placeholder.com/100x150?text=Brak+okładki';
+    : '/brakOkladki/brakOkladki.png';
 
   return (
     <div className={styles.item}>

@@ -14,7 +14,7 @@ const Library = ({ library, onToggleStatus, onRemove, onShowDetails }) => {
             src={
               book.coverId
                 ? `https://covers.openlibrary.org/b/id/${book.coverId}-S.jpg`
-                : 'https://via.placeholder.com/60x90?text=?'
+                : '/brakOkladki/brakOkladki.png'
             }
             alt={book.title}
             className={styles.coverSmall}

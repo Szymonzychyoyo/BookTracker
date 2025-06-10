@@ -11,7 +11,11 @@ export default function Modal({ onClose, title, coverUrl, author, description })
           {coverUrl ? (
             <img src={coverUrl} alt={title} className={styles.cover} />
           ) : (
-            <div className={styles.noCover}>Brak okładki</div>
+            <img
+              src="/brakOkladki/brakOkladki.png"
+              alt="Brak okładki"
+              className={styles.cover}
+            />
           )}
         </div>
         <div className={styles.right}>
