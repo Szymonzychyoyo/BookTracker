@@ -60,3 +60,12 @@
 .button:hover {
   background: #555;
 }
+
+.authorLink {
+  color: #9cf;
+  text-decoration: none;
+}
+
+.authorLink:hover {
+  text-decoration: underline;
+}

@@ -1,11 +1,12 @@
 // client/src/pages/AuthorPage.js
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { getAuthorDetails } from "../api/openLibraryAPI";
 import styles from "./AuthorPage.module.css";
 
 const AuthorPage = () => {
   const { authorKey } = useParams();
+  const navigate = useNavigate();
   const [author, setAuthor] = useState(null);
   const [works, setWorks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -48,6 +49,9 @@ const AuthorPage = () => {
 
   return (
     <div className={styles.container}>
+      <button className={styles.backButton} onClick={() => navigate(-1)}>
+        ← Powrót
+      </button>
       <h2>{author.name}</h2>
       {descriptionText && (
         <p className={styles.description}>
@@ -58,9 +62,9 @@ const AuthorPage = () => {
       {works.length === 0 ? (
         <p>Brak dostępnych dzieł.</p>
       ) : (
-        <ul>
+        <ul className={styles.worksList}>
           {works.map((work) => (
-            <li key={work.key}>
+            <li key={work.key} className={styles.workItem}>
               <Link to={`/search?q=${encodeURIComponent(work.title)}`}>
                 {work.title}
               </Link>

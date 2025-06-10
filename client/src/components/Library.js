@@ -1,5 +1,6 @@
 // client/src/components/Library.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Library.module.css';
 
 const Library = ({ library, onToggleStatus, onRemove, onShowDetails }) => {
@@ -21,7 +22,16 @@ const Library = ({ library, onToggleStatus, onRemove, onShowDetails }) => {
           />
           <div className={styles.info}>
             <strong>{book.title}</strong><br/>
-            <small>{book.author}</small>
+            <small>
+              Autor:{' '}
+              {book.authorKey && book.authorKey.length > 0 ? (
+                <Link to={`/author/${book.authorKey[0]}`} className={styles.authorLink}>
+                  {book.author}
+                </Link>
+              ) : (
+                book.author
+              )}
+            </small>
             <div className={styles.status}>
               Status: {book.status === 'to-read' ? 'Do przeczytania' : 'Przeczytana'}
             </div>
