@@ -1,7 +1,8 @@
 /* SearchBar.module.css */
 .searchForm {
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem auto;
   display: flex;
+  justify-content: center;
 }
 
 .searchInput {
@@ -12,8 +13,7 @@
   outline: none;
   background: #222;
   color: #eee;
-}
-
+} /* <- ta klamra jest, więc OK */
 
 .searchButton {
   padding: 0.5rem 1rem;

@@ -1,6 +1,13 @@
 /* Library.module.css */
 .container {
   margin-top: 2rem;
+  padding: 1rem;
+}
+
+.heading {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .item {

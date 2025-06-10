@@ -7,7 +7,7 @@ const Library = ({ library, onToggleStatus, onRemove, onShowDetails }) => {
 
   return (
     <div className={styles.container}>
-      <h2>Moja Biblioteka</h2>
+      <h2 className={styles.heading}>Moja Biblioteka</h2>
       {library.map(book => (
         <div key={book._id} className={styles.item}>
           <img

@@ -18,6 +18,9 @@ const SearchBar = ({ onSearch }) => {
         value={query}
         placeholder="Wpisz tytuł książki..."
         onChange={e => setQuery(e.target.value)}
+        onKeyDown={e => {
+          if (e.key === 'Enter') handleSubmit(e);
+        }}
       />
       <button className={styles.searchButton} type="submit">
         Szukaj

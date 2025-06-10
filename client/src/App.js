@@ -18,6 +18,19 @@ const Header = () => {
   const { user, logout } = useAuth();
   return (
     <header className={headerStyles.header}>
+      {user && (
+        <div className={headerStyles.userInfo}>
+          {user.profileImage && (
+            <img
+              src={`http://localhost:5001${user.profileImage}`}
+              alt="Avatar"
+              className={headerStyles.avatar}
+            />
+          )}
+          <span className={headerStyles.username}>{user.username}</span>
+        </div>
+      )}
+
       <Link to="/" className={headerStyles.title}>
         Moja Biblioteka
       </Link>
@@ -25,23 +38,13 @@ const Header = () => {
       <nav className={headerStyles.nav}>
         {user ? (
           <>
-            {user.profileImage && (
-              <img
-                src={`http://localhost:5001${user.profileImage}`}
-                alt="Avatar"
-                className={headerStyles.avatar}
-              />
-            )}
-            {/* Tu wyświetlamy login obok avatara */}
-            <span className={headerStyles.username}>{user.username}</span>
-
-            <Link to="/settings">Ustawienia</Link>
-            <button onClick={logout}>Wyloguj</button>
+            <Link to="/settings" className={headerStyles.tile}>Ustawienia</Link>
+            <button onClick={logout} className={headerStyles.tile}>Wyloguj</button>
           </>
         ) : (
           <>
-            <Link to="/login">Logowanie</Link>
-            <Link to="/register">Rejestracja</Link>
+            <Link to="/login" className={headerStyles.tile}>Logowanie</Link>
+            <Link to="/register" className={headerStyles.tile}>Rejestracja</Link>
           </>
         )}
       </nav>
