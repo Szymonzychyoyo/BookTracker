@@ -1,70 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import SearchBar from '../components/SearchBar';
-import Library from '../components/Library';
-import { getAllBooks, deleteBook, updateBookStatus } from '../api/bookAPI';
+// client/src/pages/HomePage.js
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import SearchBar from "../components/SearchBar";
+import Library from "../components/Library";
+import Modal from "../components/Modal";
+import { getAllBooks, deleteBook, updateBookStatus } from "../api/bookAPI";
+import { getWorkDetails } from "../api/openLibraryAPI";
 
 const HomePage = () => {
   const [library, setLibrary] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [selected, setSelected] = useState(null);
+  const [desc, setDesc] = useState("");
+  const [modalLoading, setModalLoading] = useState(false);
   const navigate = useNavigate();
 
-  // 1) ładujemy bibliotekę przy montowaniu
   useEffect(() => {
-    (async () => {
-      try {
-        const data = await getAllBooks();
-        setLibrary(data);
-      } catch (err) {
-        console.error('Nie udało się załadować biblioteki', err);
-        alert('Błąd ładowania biblioteki');
-      }
-    })();
+    getAllBooks()
+      .then(data => setLibrary(data))
+      .catch(err => setError(err.message || "Błąd"))
+      .finally(() => setLoading(false));
   }, []);
 
-  // 2) przejście na stronę wyszukiwania
-  const handleSearch = (query) => {
-    navigate(`/search?q=${encodeURIComponent(query)}`);
-  };
+  const handleSearch = q => navigate(`/search?q=${encodeURIComponent(q)}`);
 
-  // 3) zmiana statusu książki
-  const handleToggleStatus = async (book) => {
-    const newStatus = book.status === 'to-read' ? 'read' : 'to-read';
-    try {
-      const updated = await updateBookStatus(book._id, newStatus);
-      setLibrary((prev) =>
-        prev.map((b) => (b._id === updated._id ? updated : b))
-      );
-    } catch (err) {
-      console.error('Błąd przy zmianie statusu:', err.response || err);
-      const msg = err.response?.data?.message || err.message;
-      alert(`Błąd przy zmianie statusu: ${msg}`);
-      if (err.response?.status === 401) navigate('/login');
-    }
-  };
+  const toggleStatus = b =>
+    updateBookStatus(b._id, b.status === "to-read" ? "read" : "to-read")
+      .then(u => setLibrary(l => l.map(x => x._id === u._id ? u : x)))
+      .catch(err => alert(err.message));
 
-  // 4) usuwanie książki
-  const handleRemove = async (id, title) => {
-    if (!window.confirm(`Usunąć „${title}” z biblioteki?`)) return;
+  const remove = id =>
+    deleteBook(id)
+      .then(() => setLibrary(l => l.filter(x => x._id !== id)))
+      .catch(err => alert(err.message));
+
+  const showDetails = async b => {
+    setSelected(b);
+    setModalLoading(true);
     try {
-      await deleteBook(id);
-      setLibrary((prev) => prev.filter((b) => b._id !== id));
-      alert(`Usunięto: ${title}`);
-    } catch (err) {
-      console.error('Błąd podczas usuwania książki:', err.response || err);
-      const msg = err.response?.data?.message || err.message;
-      alert(`Błąd podczas usuwania książki: ${msg}`);
-      if (err.response?.status === 401) navigate('/login');
+      const workKey = b.openLibraryId.split("/").pop();
+      const data = await getWorkDetails(workKey);
+      let d = data.description || data.bio || "";
+      if (typeof d === "object") d = d.value;
+      setDesc(d);
+    } catch {
+      setDesc("Brak opisu.");
+    } finally {
+      setModalLoading(false);
     }
   };
 
   return (
     <div>
       <SearchBar onSearch={handleSearch} />
-      <Library
-        library={library}
-        onRemove={handleRemove}
-        onToggleStatus={handleToggleStatus}
-      />
+      {loading && <p>Ładowanie biblioteki…</p>}
+      {error && <p style={{ color: "red" }}>Błąd: {error}</p>}
+      {!loading && !error && (
+        <Library
+          library={library}
+          onToggleStatus={toggleStatus}
+          onRemove={(id, title) => {
+            if (!window.confirm(`Usuń "${title}"?`)) return;
+            remove(id);
+          }}
+          onShowDetails={showDetails}
+        />
+      )}
+
+      {selected && (
+        <Modal
+          onClose={() => setSelected(null)}
+          title={selected.title}
+          coverUrl={selected.coverId
+            ? `https://covers.openlibrary.org/b/id/${selected.coverId}-L.jpg`
+            : null}
+          description={modalLoading ? "Ładowanie opisu…" : desc}
+        />
+      )}
     </div>
   );
 };

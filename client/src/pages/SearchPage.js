@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import SearchResults from '../components/SearchResults';
-import { searchBooksOpenLibrary } from '../api/openLibraryAPI';
-import { getAllBooks, addBook, deleteBook } from '../api/bookAPI';
+import Modal from '../components/Modal';
+import { searchBooksOpenLibrary, getWorkDetails } from '../api/openLibraryAPI';
+import { getAllBooks, addBook, deleteBook, updateBookStatus } from '../api/bookAPI';
 
 const SearchPage = () => {
   const [results, setResults] = useState([]);
@@ -14,69 +15,113 @@ const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get('q') || '';
 
-  // Ładuj bibliotekę, by wiedzieć co już dodane
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const perPage = 10;
+  const totalPages = Math.ceil(results.length / perPage);
+  const visible = results.slice((currentPage - 1) * perPage, currentPage * perPage);
+
+  // modal
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [description, setDescription] = useState('');
+  const [modalLoading, setModalLoading] = useState(false);
+
+  // load library
   useEffect(() => {
-    (async () => {
-      try {
-        const data = await getAllBooks();
-        setLibrary(data);
-      } catch (err) {
-        console.error('Nie udało się załadować biblioteki', err);
-      }
-    })();
+    getAllBooks()
+      .then(setLibrary)
+      .catch(console.error);
   }, []);
 
-  // Wyszukiwanie przy zmianie `q`
+  // search
   useEffect(() => {
     if (!q) return;
     setLoading(true);
     setError('');
+    setCurrentPage(1);
     searchBooksOpenLibrary(q)
-      .then((data) => setResults(data))
-      .catch(() => setError('Nie udało się pobrać wyników.'))
+      .then(setResults)
+      .catch(err => setError(err.response?.data?.message || err.message))
       .finally(() => setLoading(false));
   }, [q]);
 
-  const handleSearch = (query) => {
-    setSearchParams({ q: query });
+  const handleSearch = query => setSearchParams({ q: query });
+  const handleAdd = b => addBook(b).then(a => setLibrary(l => [...l, a])).catch(err => alert(err.message));
+  const handleToggleStatus = b =>
+    updateBookStatus(b._id, b.status === 'to-read' ? 'read' : 'to-read')
+      .then(u => setLibrary(l => l.map(x => x._id === u._id ? u : x)))
+      .catch(err => alert(err.message));
+
+  const handleRemove = openLibraryId => {
+    const entry = library.find(x => x.openLibraryId === openLibraryId);
+    if (!entry) return alert('Nie znaleziono w bibliotece');
+    if (!window.confirm(`Usuń "${entry.title}"?`)) return;
+    deleteBook(entry._id)
+      .then(() => setLibrary(l => l.filter(x => x._id !== entry._id)))
+      .catch(err => alert(err.message));
   };
 
-  const handleAdd = async (bookData) => {
+  const handleShowDetails = async b => {
+    setSelectedBook(b);
+    setModalLoading(true);
     try {
-      const added = await addBook(bookData);
-      setLibrary((prev) => [...prev, added]);
-      alert(`Dodano: ${added.title} jako ${added.status === 'read' ? 'przeczytaną' : 'do przeczytania'}.`);
+      const workKey = b.key.split('/').pop();
+      const data = await getWorkDetails(workKey);
+      let desc = data.description || data.bio || '';
+      if (typeof desc === 'object') desc = desc.value;
+      setDescription(desc);
     } catch {
-      alert('Błąd podczas dodawania książki.');
-    }
-  };
-
-  const handleRemove = async (openLibraryId) => {
-    const book = library.find((b) => b.openLibraryId === openLibraryId);
-    if (!book) return;
-    if (!window.confirm(`Usunąć „${book.title}” z biblioteki?`)) return;
-
-    try {
-      await deleteBook(book._id);
-      setLibrary((prev) => prev.filter((b) => b._id !== book._id));
-      alert(`Usunięto: ${book.title}`);
-    } catch {
-      alert('Błąd podczas usuwania książki.');
+      setDescription('Brak opisu.');
+    } finally {
+      setModalLoading(false);
     }
   };
 
   return (
     <div>
       <SearchBar onSearch={handleSearch} initialValue={q} />
-      <SearchResults
-        results={results}
-        library={library}
-        onAddToRead={(book) => handleAdd({ ...book, status: 'to-read' })}
-        onAddRead={(book) => handleAdd({ ...book, status: 'read' })}
-        onRemove={handleRemove}
-        loading={loading}
-        error={error}
-      />
+
+      {loading && <p>Ładowanie wyników…</p>}
+      {error && <p style={{ color: 'red' }}>Błąd: {error}</p>}
+
+      {!loading && !error && (
+        <>
+          <SearchResults
+            results={visible}
+            library={library}
+            onAddToRead={b => handleAdd({ ...b, status: 'to-read' })}
+            onAddRead={b => handleAdd({ ...b, status: 'read' })}
+            onRemove={handleRemove}
+            onShowDetails={handleShowDetails}
+          />
+
+          {totalPages > 1 && (
+            <div style={{ textAlign: 'center', margin: '1rem 0' }}>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i+1}
+                  disabled={currentPage === i+1}
+                  onClick={() => setCurrentPage(i+1)}
+                  style={{ margin: '0 4px', fontWeight: currentPage===i+1 ? 'bold': 'normal' }}
+                >
+                  {i+1}
+                </button>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {selectedBook && (
+        <Modal
+          onClose={() => setSelectedBook(null)}
+          title={selectedBook.title}
+          coverUrl={selectedBook.cover_i
+            ? `https://covers.openlibrary.org/b/id/${selectedBook.cover_i}-L.jpg`
+            : null}
+          description={modalLoading ? 'Ładowanie opisu…' : description}
+        />
+      )}
     </div>
   );
 };

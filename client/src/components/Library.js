@@ -1,15 +1,14 @@
+// client/src/components/Library.js
 import React from 'react';
 import styles from './Library.module.css';
 
-const Library = ({ library, onRemove, onToggleStatus }) => {
-  if (!Array.isArray(library) || library.length === 0) {
-    return <p>Twoja biblioteka jest pusta.</p>;
-  }
+const Library = ({ library, onToggleStatus, onRemove, onShowDetails }) => {
+  if (!library.length) return <p>Twoja biblioteka jest pusta.</p>;
 
   return (
     <div className={styles.container}>
       <h2>Moja Biblioteka</h2>
-      {library.map((book) => (
+      {library.map(book => (
         <div key={book._id} className={styles.item}>
           <img
             src={
@@ -21,12 +20,10 @@ const Library = ({ library, onRemove, onToggleStatus }) => {
             className={styles.coverSmall}
           />
           <div className={styles.info}>
-            <span className={styles.title}>{book.title}</span>
-            <br />
+            <strong>{book.title}</strong><br/>
             <small>{book.author}</small>
             <div className={styles.status}>
-              Status:{' '}
-              {book.status === 'to-read' ? 'Do przeczytania' : 'Przeczytana'}
+              Status: {book.status === 'to-read' ? 'Do przeczytania' : 'Przeczytana'}
             </div>
           </div>
           <div className={styles.actions}>
@@ -34,15 +31,19 @@ const Library = ({ library, onRemove, onToggleStatus }) => {
               className={styles.button}
               onClick={() => onToggleStatus(book)}
             >
-              {book.status === 'to-read'
-                ? 'Oznacz jako przeczytaną'
-                : 'Oznacz jako do przeczytania'}
+              {book.status === 'to-read' ? 'Przeczytana' : 'Do przeczytania'}
             </button>
             <button
               className={styles.button}
               onClick={() => onRemove(book._id, book.title)}
             >
               Usuń
+            </button>
+            <button
+              className={styles.button}
+              onClick={() => onShowDetails(book)}
+            >
+              Szczegóły
             </button>
           </div>
         </div>

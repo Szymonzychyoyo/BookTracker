@@ -1,44 +1,15 @@
-// server/models/Book.js
 const mongoose = require('mongoose');
 
 const bookSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    author: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    // Identyfikator z Open Library (z pola "key": "/works/OL82548W")
-    openLibraryId: {
-      type: String,
-      trim: true,
-      default: '',
-    },
-    // Identyfikator okładki z Open Library (pole "cover_i")
-    coverId: {
-      type: Number,
-      default: null,
-    },
-    // Lista kluczy autorów (pole "author_key": ["OL23919A", ...])
-    authorKey: {
-      type: [String],
-      default: [],
-    },
-    owner: {
-     type: mongoose.Schema.Types.ObjectId,
-     ref: 'User',
-     required: true
-   },
-    status: {
-      type: String,
-      enum: ['to-read', 'read'],
-      default: 'to-read',
-    },
+    title: { type: String, required: true, trim: true },
+    author: { type: String, required: true, trim: true },
+    openLibraryId: { type: String, trim: true, default: '' },
+    coverId: { type: Number, default: null },
+    authorKey: { type: [String], default: [] },
+    // subjects usunięte
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    status: { type: String, enum: ['to-read','read'], default: 'to-read' }
   },
   { timestamps: true }
 );

@@ -9,11 +9,12 @@ const SearchResults = ({
   onAddToRead,
   onAddRead,
   onRemove,
+  onShowDetails,
   loading,
   error
 }) => {
   if (loading) return <p className={styles.message}>Ładowanie wyników...</p>;
-  if (error)   return <p className={styles.error}>Błąd: {error}</p>;
+  if (error) return <p className={styles.error}>Błąd: {error}</p>;
   if (!Array.isArray(results) || results.length === 0)
     return <p className={styles.message}>Brak wyników wyszukiwania.</p>;
 
@@ -29,6 +30,7 @@ const SearchResults = ({
             onAddToRead={onAddToRead}
             onAddRead={onAddRead}
             onRemove={onRemove}
+            onShowDetails={onShowDetails}
           />
         );
       })}

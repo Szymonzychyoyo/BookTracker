@@ -19,19 +19,20 @@ const getAllBooks = async (req, res) => {
 // @desc    Dodaj nową książkę
 // @route   POST /api/books
 // @access  Private
+// ... w createBook usuń subjects z destrukturyzacji i z konstruktora
 const createBook = async (req, res) => {
   try {
     const {
       title,
       author,
-      openLibraryId = "",
+      openLibraryId = '',
       coverId = null,
       authorKey = [],
-      status = "to-read",
+      status = 'to-read'
     } = req.body;
 
     if (!title || !author) {
-      return res.status(400).json({ message: "Podaj tytuł i autora książki" });
+      return res.status(400).json({ message: 'Podaj tytuł i autora książki' });
     }
 
     const newBook = new Book({
@@ -41,16 +42,17 @@ const createBook = async (req, res) => {
       coverId,
       authorKey,
       status,
-      owner: req.user._id,
+      owner: req.user._id
     });
 
     const savedBook = await newBook.save();
     res.status(201).json(savedBook);
   } catch (error) {
-    console.error("Błąd podczas tworzenia książki:", error.message);
-    res.status(500).json({ message: "Wewnętrzny błąd serwera" });
+    console.error('Błąd podczas tworzenia książki:', error.message);
+    res.status(500).json({ message: 'Wewnętrzny błąd serwera' });
   }
 };
+
 
 // @desc    Zaktualizuj status książki (to-read ↔ read)
 // @route   PATCH /api/books/:id
@@ -91,7 +93,6 @@ const deleteBook = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // szukamy i usuwamy w jednym kroku, tylko dla zalogowanego właściciela
     const deleted = await Book.findOneAndDelete({
       _id: id,
       owner: req.user._id,

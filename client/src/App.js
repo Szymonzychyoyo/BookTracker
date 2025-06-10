@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 
 import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
+import AuthorPage from "./pages/AuthorPage";       // ← import AuthorPage
 import SettingsPage from "./pages/SettingsPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -70,6 +71,7 @@ function App() {
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+
           <Route
             path="/"
             element={
@@ -78,14 +80,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                <SettingsPage />
-              </ProtectedRoute>
-            }
-          />
+
+          {/* Podstrona wyszukiwania */}
           <Route
             path="/search"
             element={
@@ -94,8 +90,28 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Podstrona autora */}
+          <Route
+            path="/author/:authorKey"
+            element={
+              <ProtectedRoute>
+                <AuthorPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Ustawienia */}
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <SettingsPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
-      </BrowserRouter>{" "}
+      </BrowserRouter>
     </AuthProvider>
   );
 }
