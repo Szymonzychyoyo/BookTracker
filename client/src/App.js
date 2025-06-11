@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
 import AuthorPage from "./pages/AuthorPage";       // ← import AuthorPage
 import SettingsPage from "./pages/SettingsPage";
+import TierListPage from "./pages/TierListPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -94,6 +95,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <SettingsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/tierlist"
+            element={
+              <ProtectedRoute>
+                <TierListPage />
               </ProtectedRoute>
             }
           />

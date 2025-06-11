@@ -1,0 +1,11 @@
+import api from './axiosConfig';
+
+export const createTierList = async (name) => {
+  const { data } = await api.post('/tierlists', { name });
+  return data;
+};
+
+export const updateTierList = async (id, tiers) => {
+  const { data } = await api.patch(`/tierlists/${id}`, { tiers });
+  return data;
+};

@@ -28,6 +28,9 @@ const UserMenu = () => {
           <Link to="/settings" className={styles.item} onClick={() => setOpen(false)}>
             Ustawienia
           </Link>
+          <Link to="/tierlist" className={styles.item} onClick={() => setOpen(false)}>
+            Tier lista
+          </Link>
           <button className={styles.item} onClick={logout}>Wyloguj</button>
         </div>
       )}

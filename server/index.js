@@ -23,6 +23,9 @@ app.use('/api/openlibrary', openLibraryRoutes);
 const bookRoutes = require('./routes/bookRoutes');
 app.use('/api/books', bookRoutes);
 
+const tierListRoutes = require('./routes/tierListRoutes');
+app.use('/api/tierlists', tierListRoutes);
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/brakOkladki', express.static(path.join(__dirname, 'brakOkladki')));
 
