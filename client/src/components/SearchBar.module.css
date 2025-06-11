@@ -17,15 +17,19 @@
 } /* <- ta klamra jest, więc OK */
 
 .searchButton {
-  padding: 0.5rem 1rem;
-  border: 1px solid #555;
-  background: #333;
-  color: #eee;
-  border-radius: 0 4px 4px 0;
+  position: relative;
+  background: transparent;
+  color: #8e44ad;
+  padding: 0.75em 1.5em;
+  border: 2px solid #8e44ad;
+  border-radius: 0 6px 6px 0;
+  font-size: 1rem;
+  overflow: hidden;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 
 .searchButton:hover {
-  background: #555;
+  background: #8e44ad;
+  color: #fff;
 }

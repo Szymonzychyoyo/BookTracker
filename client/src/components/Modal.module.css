@@ -41,7 +41,7 @@
 }
 
 .cover {
-  width: 150px;
+ width: 150px;
   height: 220px;
   object-fit: cover;
   border-radius: 8px;
@@ -66,9 +66,18 @@
   top: 12px;
   right: 18px;
   background: transparent;
-  border: none;
+  color: #8e44ad;
+  padding: 0.75em 1.5em;
+  border: 2px solid #8e44ad;
+  border-radius: 6px;
   font-size: 2rem;
+  overflow: hidden;
   cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.closeButton:hover {
+  background: #8e44ad;
   color: #fff;
 }
 
