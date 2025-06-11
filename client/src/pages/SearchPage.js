@@ -17,7 +17,7 @@ const SearchPage = () => {
   const [results, setResults] = useState([]);
   const [library, setLibrary] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+ const [error, setError] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get("q") || "";
 
@@ -41,6 +41,14 @@ const SearchPage = () => {
       .then(setLibrary)
       .catch((err) => setError(err.message));
   }, []);
+
+  // run search on initial query param
+  useEffect(() => {
+    if (q) {
+      handleSearch(q);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q]);
 
   // search and handle functions
   const handleSearch = async (query) => {
