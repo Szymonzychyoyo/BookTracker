@@ -7,8 +7,8 @@ import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
 import AuthorPage from "./pages/AuthorPage";       // ← import AuthorPage
 import SettingsPage from "./pages/SettingsPage";
-import TierListPage from "./pages/TierListPage";
-import TierListsPage from "./pages/TierListsPage";
+import TierListPage from "./pages/TierListPage.js";
+import TierListsPage from "./pages/TierListsPage.js";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
