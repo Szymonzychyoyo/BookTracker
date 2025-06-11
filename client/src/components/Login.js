@@ -6,7 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import styles from './Login.module.css';
 
 const Login = () => {
-  const [form, setForm] = useState({ email: '', password: '' });
+const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -31,16 +31,30 @@ const Login = () => {
     <div className={styles.container}>
       <h2>Logowanie</h2>
       {error && <p className={styles.error}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.field}>
           <label>Email:</label>
-          <input name="email" type="email" value={form.email} onChange={handleChange} required />
+          <input
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className={styles.fullWidth}
+          />
         </div>
-        <div>
+        <div className={styles.field}>
           <label>Hasło:</label>
-          <input name="password" type="password" value={form.password} onChange={handleChange} required />
+          <input
+            name="password"
+            type="password"
+            value={form.password}
+            onChange={handleChange}
+            required
+            className={styles.fullWidth}
+          />
         </div>
-        <button type="submit">Zaloguj się</button>
+        <button type="submit" className={styles.submit}>Zaloguj się</button>
       </form>
       <p>
         Nie masz konta? <Link to="/register">Zarejestruj się</Link>

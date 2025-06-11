@@ -6,7 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import styles from './Register.module.css';
 
 const Register = () => {
-  const [form, setForm] = useState({ username: '', email: '', password: '' });
+ const [form, setForm] = useState({ username: '', email: '', password: '' });
   const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -31,20 +31,40 @@ const Register = () => {
     <div className={styles.container}>
       <h2>Rejestracja</h2>
       {error && <p className={styles.error}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.field}>
           <label>Login:</label>
-          <input name="username" value={form.username} onChange={handleChange} required />
+          <input
+            name="username"
+            value={form.username}
+            onChange={handleChange}
+            required
+            className={styles.fullWidth}
+          />
         </div>
-        <div>
+        <div className={styles.field}>
           <label>Email:</label>
-          <input name="email" type="email" value={form.email} onChange={handleChange} required />
+          <input
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className={styles.fullWidth}
+          />
         </div>
-        <div>
+        <div className={styles.field}>
           <label>Hasło:</label>
-          <input name="password" type="password" value={form.password} onChange={handleChange} required />
+          <input
+            name="password"
+            type="password"
+            value={form.password}
+            onChange={handleChange}
+            required
+            className={styles.fullWidth}
+          />
         </div>
-        <button type="submit">Zarejestruj się</button>
+        <button type="submit" className={styles.submit}>Zarejestruj się</button>
       </form>
       <p>
         Masz konto? <Link to="/login">Zaloguj się</Link>
