@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import styles from "./TierListPage.module.css";
 import { getAllBooks } from "../api/bookAPI";
 import { createTierList, updateTierList, getTierList } from "../api/tierListAPI";
@@ -12,9 +12,29 @@ const TierListPage = () => {
   const [error, setError] = useState("");
   const [listId, setListId] = useState(null);
   const [books, setBooks] = useState([]);
-  const [tiers, setTiers] = useState(() =>
+  const [tiers, setTiers] = useState(
     labels.map((l) => ({ label: l, books: [] }))
   );
+
+  // load all books and, if editing, load existing tier list
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const bookList = await getAllBooks();
+        setBooks(bookList);
+
+        if (id) {
+          const saved = await getTierList(id);
+          setListId(saved._id);
+          setName(saved.name);
+          setTiers(saved.tiers);
+        }
+      } catch (err) {
+        setError("Błąd ładowania danych");
+      }
+    }
+    fetchData();
+  }, [id]);
 
   const handlePageDragOver = (e) => {
     const margin = 40;
@@ -26,39 +46,6 @@ const TierListPage = () => {
     e.preventDefault();
   };
 
-  useEffect(() => {
-    getAllBooks()
-      .then((data) => setBooks(data.filter((b) => b.status === "read")))
-      .catch(() => setError("Błąd pobierania książek"));
-  }, []);
-
-  useEffect(() => {
-    if (id) {
-      setListId(id);
-      getTierList(id)
-        .then((data) => {
-          setName(data.name);
-          setTiers(data.tiers);
-        })
-        .catch(() => setError("Błąd pobierania listy"));
-    }
-  }, [id]);
-
-  const handleCreate = async (e) => {
-    e.preventDefault();
-    setError("");
-    if (!name.trim()) {
-      setError("Podaj nazwę listy");
-      return;
-    }
-    try {
-      const res = await createTierList(name.trim());
-      setListId(res._id);
-    } catch (err) {
-      setError("Błąd tworzenia listy");
-    }
-  };
-
   const handleDrop = (book, label) => {
     setTiers((ts) =>
       ts.map((t) =>
@@ -67,6 +54,16 @@ const TierListPage = () => {
           : { ...t, books: t.books.filter((b) => b._id !== book._id) }
       )
     );
+  };
+
+  const handleCreate = async () => {
+    try {
+      const newList = await createTierList({ name: name.trim(), tiers });
+      setListId(newList._id);
+      setError("");
+    } catch (err) {
+      setError("Błąd tworzenia listy");
+    }
   };
 
   const save = async () => {
@@ -80,35 +77,37 @@ const TierListPage = () => {
 
   return (
     <div>
-      <h2>{listId ? "Edytuj Tier Listę" : "Nowa Tier Lista"}</h2>
-      {error && <p className={styles.error}>{error}</p>}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!name.trim()) {
-            setError("Podaj nazwę listy");
-            return;
-          }
-          if (listId) {
-            save();
-          } else {
-            handleCreate(e);
-          }
-        }}
-        className={styles.field}
-      >
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Nazwa listy"
-          className={styles.fullWidth}
-          required
-        />
-        <button type="submit" className={styles.button}>
-          {listId ? "Zapisz listę" : "Utwórz"}
-        </button>
-      </form>
+      <Link to="/tierlists" className={styles.backButton}>
+        Powrót
+      </Link>
+      <div className={styles.container}>
+        <h2>{listId ? "Edytuj Tier Listę" : "Nowa Tier Lista"}</h2>
+        {error && <p className={styles.error}>{error}</p>}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!name.trim()) {
+              setError("Podaj nazwę listy");
+              return;
+            }
+            if (listId) save();
+            else handleCreate();
+          }}
+          className={styles.form}
+        >
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Nazwa listy"
+            className={styles.fullWidth}
+            required
+          />
+          <button type="submit" className={styles.button}>
+            {listId ? "Zapisz listę" : "Utwórz"}
+          </button>
+        </form>
+      </div>
       {listId && (
         <>
           <div onDragOver={handlePageDragOver}>
@@ -119,8 +118,8 @@ const TierListPage = () => {
                   className={styles.dropZone}
                   onDragOver={handlePageDragOver}
                   onDrop={(e) => {
-                    const id = e.dataTransfer.getData("id");
-                    const book = books.find((b) => b._id === id);
+                    const bid = e.dataTransfer.getData("id");
+                    const book = books.find((b) => b._id === bid);
                     if (book) handleDrop(book, t.label);
                   }}
                 >
