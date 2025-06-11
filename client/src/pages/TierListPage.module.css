@@ -1,0 +1,55 @@
+.row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.label {
+  width: 40px;
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.dropZone {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 60px;
+  border: 1px dashed #ccc;
+  padding: 4px;
+  overflow-y: auto;
+}
+
+.book {
+  display: flex;
+  align-items: center;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+.book img {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  margin-right: 4px;
+}
+
+.bookList {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+}
+
+.bookItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  cursor: grab;
+}
+
+.bookItem img {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  margin-right: 4px;
+}

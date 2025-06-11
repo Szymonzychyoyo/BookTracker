@@ -1,0 +1,103 @@
+/* TierListsPage.module.css */
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #000000; /* czarne tło */
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #ffffff; /* biały tekst */
+}
+
+.error {
+  color: #ab47bc; /* fioletowy tekst */
+  background-color: #ffffff; /* białe tło */
+  border: 1px solid #ab47bc; /* fioletowa ramka */
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  background-color: #4b206f; /* fioletowe tło */
+  border: 1px solid #ffffff; /* biała ramka */
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  color: #ffffff; /* biały tekst */
+}
+
+.listItem strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #ffffff; /* biały tekst */
+}
+
+.tierList {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0 0;
+}
+
+.tierItem {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: flex-start;
+}
+
+.tierLabel {
+  flex-shrink: 0;
+  font-weight: 600;
+  width: 4rem;
+  color: #d1c4e9; /* jasne fioletowe etykiety */
+}
+
+.bookList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.bookItem {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff; /* białe tło dla książek */
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #4b206f; /* fioletowa ramka */
+  border-radius: 4px;
+  color: #000000; /* czarny tekst */
+}
+
+.bookCover {
+  width: 30px;
+  height: 45px;
+  object-fit: cover;
+  margin-right: 0.5rem;
+}
+
+.button {
+  display: inline-block;
+  text-decoration: none;
+  background-color: #ab47bc; /* fioletowy przycisk */
+  color: #ffffff; /* biały tekst */
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  margin-top: 1rem;
+}
+
+.button:hover {
+  background-color: #7b1fa2; /* ciemniejszy fiolet po najechaniu */
+}

@@ -7,7 +7,7 @@ const getTierLists = async (req, res) => {
   try {
     const lists = await TierList.find({ owner: req.user._id }).populate({
       path: 'tiers.books',
-      select: 'title'
+      select: 'title coverId'
     });
     res.json(lists);
   } catch (err) {

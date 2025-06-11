@@ -1,51 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import styles from './HomePage.module.css';
-import { getAllBooks } from '../api/bookAPI';
-import { createTierList, updateTierList } from '../api/tierListAPI';
+import React, { useState, useEffect } from "react";
+import styles from "./TierListPage.module.css";
+import { getAllBooks } from "../api/bookAPI";
+import { createTierList, updateTierList } from "../api/tierListAPI";
 
-const labels = ['S', 'A', 'B', 'C', 'D', 'F'];
+const labels = ["S", "A", "B", "C", "D", "F"];
 
 const TierListPage = () => {
-  const [name, setName] = useState('');
-  const [error, setError] = useState('');
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
   const [listId, setListId] = useState(null);
   const [books, setBooks] = useState([]);
-  const [tiers, setTiers] = useState(() => labels.map(l => ({ label: l, books: [] })));
+  const [tiers, setTiers] = useState(() =>
+    labels.map((l) => ({ label: l, books: [] }))
+  );
+
+  const handlePageDragOver = (e) => {
+    const margin = 40;
+    if (e.clientY < margin) {
+      window.scrollBy(0, -10);
+    } else if (window.innerHeight - e.clientY < margin) {
+      window.scrollBy(0, 10);
+    }
+    e.preventDefault();
+  };
 
   useEffect(() => {
     getAllBooks()
-      .then(data => setBooks(data.filter(b => b.status === 'read')))
-      .catch(() => setError('Błąd pobierania książek'));
+      .then((data) => setBooks(data.filter((b) => b.status === "read")))
+      .catch(() => setError("Błąd pobierania książek"));
   }, []);
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     if (!name.trim()) {
-      setError('Podaj nazwę listy');
+      setError("Podaj nazwę listy");
       return;
     }
     try {
       const res = await createTierList(name.trim());
       setListId(res._id);
     } catch (err) {
-      setError('Błąd tworzenia listy');
+      setError("Błąd tworzenia listy");
     }
   };
 
   const handleDrop = (book, label) => {
-    setTiers(ts => ts.map(t =>
-      t.label === label ? { ...t, books: [...t.books, book] } : { ...t, books: t.books.filter(b => b._id !== book._id) }
-    ));
+    setTiers((ts) =>
+      ts.map((t) =>
+        t.label === label
+          ? { ...t, books: [...t.books, book] }
+          : { ...t, books: t.books.filter((b) => b._id !== book._id) }
+      )
+    );
   };
 
   const save = async () => {
-    if (!listId) return;
     try {
-      await updateTierList(listId, tiers.map(t => ({ label: t.label, books: t.books.map(b => b._id) })));
-      alert('Zapisano tier listę');
-    } catch {
-      setError('Błąd zapisu');
+      await updateTierList(listId, tiers);
+      setError("");
+    } catch (err) {
+      setError("Błąd zapisu");
     }
   };
 
@@ -58,51 +73,75 @@ const TierListPage = () => {
           <input
             type="text"
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             placeholder="Nazwa listy"
             className={styles.fullWidth}
             required
           />
-          <button type="submit" className={styles.button}>Utwórz</button>
+          <button type="submit" className={styles.button}>
+            Utwórz
+          </button>
         </form>
       ) : (
         <>
           <div className={styles.field}>
-            <button onClick={save} className={styles.button}>Zapisz listę</button>
+            <button onClick={save} className={styles.button}>
+              Zapisz listę
+            </button>
           </div>
-          <div>
-            {tiers.map(t => (
-              <div key={t.label} style={{ marginBottom: '1rem' }}>
-                <strong>{t.label}</strong>
+          <div onDragOver={handlePageDragOver}>
+            {tiers.map((t) => (
+              <div key={t.label} className={styles.row}>
+                <span className={styles.label}>{t.label}</span>
                 <div
-                  style={{ minHeight: '50px', border: '1px dashed #ccc', padding: '4px' }}
-                  onDragOver={e => e.preventDefault()}
-                  onDrop={e => {
-                    const id = e.dataTransfer.getData('id');
-                    const book = books.find(b => b._id === id);
+                  className={styles.dropZone}
+                  onDragOver={handlePageDragOver}
+                  onDrop={(e) => {
+                    const id = e.dataTransfer.getData("id");
+                    const book = books.find((b) => b._id === id);
                     if (book) handleDrop(book, t.label);
                   }}
                 >
-                  {t.books.map(b => (
-                    <span key={b._id} style={{ marginRight: '4px' }}>{b.title}</span>
+                  {t.books.map((b) => (
+                    <div key={b._id} className={styles.book}>
+                      <img
+                        src={
+                          b.coverId
+                            ? `https://covers.openlibrary.org/b/id/${b.coverId}-S.jpg`
+                            : "/brakOkladki/brakOkladki.png"
+                        }
+                        alt={b.title}
+                      />
+                      <span>{b.title}</span>
+                    </div>
                   ))}
                 </div>
               </div>
             ))}
           </div>
           <hr />
-          <div>
+          <div onDragOver={handlePageDragOver}>
             <h3>Przeciągnij książki</h3>
-            {books.map(b => (
-              <div
-                key={b._id}
-                draggable
-                onDragStart={e => e.dataTransfer.setData('id', b._id)}
-                style={{ cursor: 'grab' }}
-              >
-                {b.title}
-              </div>
-            ))}
+            <div className={styles.bookList}>
+              {books.map((b) => (
+                <div
+                  key={b._id}
+                  draggable
+                  onDragStart={(e) => e.dataTransfer.setData("id", b._id)}
+                  className={styles.bookItem}
+                >
+                  <img
+                    src={
+                      b.coverId
+                        ? `https://covers.openlibrary.org/b/id/${b.coverId}-S.jpg`
+                        : "/brakOkladki/brakOkladki.png"
+                    }
+                    alt={b.title}
+                  />
+                  <span>{b.title}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </>
       )}
