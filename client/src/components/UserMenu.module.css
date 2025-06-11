@@ -1,0 +1,44 @@
+.wrapper {
+  position: relative;
+}
+
+.button {
+  background: #333;
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.button:hover {
+  background: #555;
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.25rem);
+  display: flex;
+  flex-direction: column;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 4px;
+  min-width: 120px;
+  z-index: 100;
+}
+
+.item {
+  color: #fff;
+  padding: 0.5rem;
+  text-decoration: none;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.item:hover {
+  background: #333;
+}

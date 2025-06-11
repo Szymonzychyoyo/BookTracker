@@ -13,9 +13,10 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 import "./App.css";
 import headerStyles from "./components/Header.module.css";
+import UserMenu from "./components/UserMenu";
 
 const Header = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   return (
     <header className={headerStyles.header}>
       {user && (
@@ -37,10 +38,7 @@ const Header = () => {
 
       <nav className={headerStyles.nav}>
         {user ? (
-          <>
-            <Link to="/settings" className={headerStyles.tile}>Ustawienia</Link>
-            <button onClick={logout} className={headerStyles.tile}>Wyloguj</button>
-          </>
+          <UserMenu />
         ) : (
           <>
             <Link to="/login" className={headerStyles.tile}>Logowanie</Link>
