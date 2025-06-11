@@ -15,6 +15,7 @@ const HomePage = () => {
   const [selected, setSelected] = useState(null);
   const [desc, setDesc] = useState("");
   const [modalLoading, setModalLoading] = useState(false);
+  const [filter, setFilter] = useState("all");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,17 +53,42 @@ const HomePage = () => {
     }
   };
 
+  const filteredLibrary = library.filter((book) => {
+    if (filter === "all") return true;
+    return book.status === filter;
+  });
+
   return (
     <div>
       <SearchBar onSearch={handleSearch} />
       {loading && <p>Ładowanie biblioteki…</p>}
       {error && <p className={styles.error}>Błąd: {error}</p>}
+      <div className={styles.filter}>
+        <button
+          onClick={() => setFilter("all")}
+          className={filter === "all" ? styles.active : ""}
+        >
+          Wszystkie
+        </button>
+        <button
+          onClick={() => setFilter("read")}
+          className={filter === "read" ? styles.active : ""}
+        >
+          Przeczytane
+        </button>
+        <button
+          onClick={() => setFilter("to-read")}
+          className={filter === "to-read" ? styles.active : ""}
+        >
+          Do przeczytania
+        </button>
+      </div>
       {!loading && !error && (
         <Library
-          library={library}
+          library={filteredLibrary}
           onToggleStatus={toggleStatus}
           onRemove={(id, title) => {
-            if (!window.confirm(`Usuń "${title}"?`)) return;
+            if (!window.confirm(`Usuń \"${title}\"?`)) return;
             remove(id);
           }}
           onShowDetails={showDetails}
