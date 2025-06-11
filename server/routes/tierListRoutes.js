@@ -2,7 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const router = express.Router();
 const { protect } = require('../middlewares/authMiddleware');
-const { createTierList, updateTierList } = require('../controllers/tierListController');
+const { createTierList, updateTierList, getTierLists } = require('../controllers/tierListController');
 
 router.post(
   '/',
@@ -11,6 +11,7 @@ router.post(
   createTierList
 );
 
+router.get('/', protect, getTierLists);
 router.patch(
   '/:id',
   protect,

@@ -9,3 +9,8 @@ export const updateTierList = async (id, tiers) => {
   const { data } = await api.patch(`/tierlists/${id}`, { tiers });
   return data;
 };
+
+export const getTierLists = async () => {
+  const { data } = await api.get('/tierlists');
+  return data;
+};

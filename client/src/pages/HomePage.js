@@ -1,6 +1,6 @@
 // client/src/pages/HomePage.js
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import Library from "../components/Library";
 import Modal from "../components/Modal";
@@ -58,7 +58,7 @@ const HomePage = () => {
     return book.status === filter;
   });
 
-  return (
+   return (
     <div>
       <SearchBar onSearch={handleSearch} />
       {loading && <p>Ładowanie biblioteki…</p>}
@@ -82,6 +82,7 @@ const HomePage = () => {
         >
           Do przeczytania
         </button>
+        <Link to="/tierlists">TierListy</Link>
       </div>
       {!loading && !error && (
         <Library

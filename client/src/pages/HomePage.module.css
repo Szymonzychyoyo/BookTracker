@@ -23,6 +23,25 @@
   transition: background 0.2s, color 0.2s;
 }
 
+.filter a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #8e44ad;
+  padding: 0.4em 0.8em;
+  min-width: 120px;
+  border: 2px solid #8e44ad;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.filter a:hover {
+  background: #8e44ad;
+  color: #fff;
+}
+
 .filter button:hover {
   background: #8e44ad;
   color: #fff;

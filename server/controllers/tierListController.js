@@ -2,6 +2,19 @@ const { validationResult } = require('express-validator');
 const TierList = require('../models/TierList');
 
 const DEFAULT_TIERS = ['S', 'A', 'B', 'C', 'D', 'F'];
+// GET /api/tierlists - list user's tier lists
+const getTierLists = async (req, res) => {
+  try {
+    const lists = await TierList.find({ owner: req.user._id }).populate({
+      path: 'tiers.books',
+      select: 'title'
+    });
+    res.json(lists);
+  } catch (err) {
+    console.error('getTierLists error', err.message);
+    res.status(500).json({ message: 'Błąd serwera' });
+  }
+};
 
 // POST /api/tierlists - create new tier list
 const createTierList = async (req, res) => {
@@ -42,5 +55,6 @@ const updateTierList = async (req, res) => {
 
 module.exports = {
   createTierList,
-  updateTierList
+  updateTierList,
+  getTierLists
 };
