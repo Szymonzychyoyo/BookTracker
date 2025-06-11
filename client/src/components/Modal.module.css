@@ -63,14 +63,14 @@
 
 .closeButton {
   position: absolute;
-  top: 12px;
-  right: 18px;
+  top: 8px;
+  right: 12px;
   background: transparent;
   color: #8e44ad;
-  padding: 0.75em 1.5em;
+  padding: 0.3em 0.6em;      /* mniejsze wcięcia */
   border: 2px solid #8e44ad;
-  border-radius: 6px;
-  font-size: 2rem;
+  border-radius: 4px;        /* mniejszy promień */
+  font-size: 1rem;           /* zmniejszona czcionka */
   overflow: hidden;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
