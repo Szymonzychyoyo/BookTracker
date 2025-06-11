@@ -52,13 +52,12 @@ const AuthorPage = () => {
       <button className={styles.backButton} onClick={() => navigate(-1)}>
         ← Powrót
       </button>
-      <h2>{author.name}</h2>
+      <h2 className={styles.title}>{author.name}</h2>
       {descriptionText && (
         <p className={styles.description}>
           {descriptionText}
         </p>
       )}
-      <h3>Dzieła autora</h3>
       {works.length === 0 ? (
         <p>Brak dostępnych dzieł.</p>
       ) : (
