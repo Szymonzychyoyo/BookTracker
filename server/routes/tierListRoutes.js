@@ -5,6 +5,7 @@ const { protect } = require('../middlewares/authMiddleware');
 const {
   createTierList,
   updateTierList,
+  getTierList,
   getTierLists,
   deleteTierList
 } = require('../controllers/tierListController');
@@ -17,10 +18,12 @@ router.post(
 );
 
 router.get('/', protect, getTierLists);
+router.get('/:id', protect, getTierList);
 router.patch(
   '/:id',
   protect,
-  body('tiers').isArray().withMessage('Tiers must be array'),
+  body('name').optional().trim().notEmpty(),
+  body('tiers').optional().isArray().withMessage('Tiers must be array'),
   updateTierList
 );
 

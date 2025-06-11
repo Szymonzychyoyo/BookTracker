@@ -108,6 +108,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+<Route
+            path="/tierlist/:id"
+            element={
+              <ProtectedRoute>
+                <TierListPage />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/tierlists"

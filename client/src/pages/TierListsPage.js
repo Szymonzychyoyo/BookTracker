@@ -35,12 +35,17 @@ const TierListsPage = () => {
           <li key={l._id} className={styles.listItem}>
             <div className={styles.listHeader}>
               <strong>{l.name}</strong>
-              <button
-                onClick={() => handleDelete(l._id)}
-                className={styles.deleteButton}
-              >
-                Usuń
-              </button>
+              <div>
+                <Link to={`/tierlist/${l._id}`} className={styles.editButton}>
+                  Edytuj
+                </Link>
+                <button
+                  onClick={() => handleDelete(l._id)}
+                  className={styles.deleteButton}
+                >
+                  Usuń
+                </button>
+              </div>
             </div>
             <ul className={styles.tierList}>
               {l.tiers.map((t) => (

@@ -104,6 +104,18 @@
   text-decoration: underline;
 }
 
+.editButton {
+  background: transparent;
+  border: none;
+  color: #ab47bc;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.editButton:hover {
+  text-decoration: underline;
+}
+
 .button {
   display: inline-block;
   text-decoration: none;

@@ -8,7 +8,7 @@ const getTierLists = async (req, res) => {
     const lists = await TierList.find({ owner: req.user._id }).populate({
       path: "tiers.books",
       select: "title coverId",
-    });
+   });
     res.json(lists);
   } catch (err) {
     console.error("getTierLists error", err.message);
@@ -33,7 +33,7 @@ const createTierList = async (req, res) => {
   }
 };
 
-// PATCH /api/tierlists/:id - update tiers
+// PATCH /api/tierlists/:id - update name or tiers
 const updateTierList = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -41,15 +41,33 @@ const updateTierList = async (req, res) => {
   }
   try {
     const { id } = req.params;
-    const { tiers } = req.body;
+    const { name, tiers } = req.body;
     const list = await TierList.findOne({ _id: id, owner: req.user._id });
     if (!list)
       return res.status(404).json({ message: "Tier lista nie znaleziona" });
-    list.tiers = tiers;
+    if (typeof name === "string" && name.trim()) list.name = name.trim();
+    if (Array.isArray(tiers)) list.tiers = tiers;
     await list.save();
     res.json(list);
   } catch (err) {
     console.error("updateTierList error", err.message);
+    res.status(500).json({ message: "Błąd serwera" });
+  }
+};
+
+// GET /api/tierlists/:id - get single list
+const getTierList = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const list = await TierList.findOne({ _id: id, owner: req.user._id }).populate({
+      path: "tiers.books",
+      select: "title coverId",
+    });
+    if (!list)
+      return res.status(404).json({ message: "Tier lista nie znaleziona" });
+    res.json(list);
+  } catch (err) {
+    console.error("getTierList error", err.message);
     res.status(500).json({ message: "Błąd serwera" });
   }
 };
@@ -77,6 +95,7 @@ const deleteTierList = async (req, res) => {
 module.exports = {
   createTierList,
   updateTierList,
+  getTierList,
   getTierLists,
   deleteTierList,
 };

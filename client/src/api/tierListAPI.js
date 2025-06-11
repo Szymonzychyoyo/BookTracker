@@ -5,8 +5,13 @@ export const createTierList = async (name) => {
   return data;
 };
 
-export const updateTierList = async (id, tiers) => {
-  const { data } = await api.patch(`/tierlists/${id}`, { tiers });
+export const updateTierList = async (id, payload) => {
+  const { data } = await api.patch(`/tierlists/${id}`, payload);
+  return data;
+};
+
+export const getTierList = async (id) => {
+  const { data } = await api.get(`/tierlists/${id}`);
   return data;
 };
 

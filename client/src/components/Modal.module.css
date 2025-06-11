@@ -41,7 +41,7 @@
 }
 
 .cover {
- width: 150px;
+  width: 150px;
   height: 220px;
   object-fit: cover;
   border-radius: 8px;
@@ -67,11 +67,12 @@
   right: 12px;
   background: transparent;
   color: #8e44ad;
-  padding: 0.3em 0.6em;      /* mniejsze wcięcia */
+  padding: 0.2em 0.4em; /* jeszcze mniejsze wcięcia */
   border: 2px solid #8e44ad;
-  border-radius: 4px;        /* mniejszy promień */
-  font-size: 1rem;           /* zmniejszona czcionka */
-  overflow: hidden;
+  border-radius: 4px;
+  font-size: 0.9rem; /* nieco mniejsza czcionka */
+  line-height: 1; /* by wysokość przycisku była kompaktowa */
+  min-width: 0; /* pozwala przyciskowi skurczyć się do zawartości */
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styles from "./TierListPage.module.css";
 import { getAllBooks } from "../api/bookAPI";
-import { createTierList, updateTierList } from "../api/tierListAPI";
+import { createTierList, updateTierList, getTierList } from "../api/tierListAPI";
 
 const labels = ["S", "A", "B", "C", "D", "F"];
 
 const TierListPage = () => {
+  const { id } = useParams();
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [listId, setListId] = useState(null);
@@ -29,6 +31,18 @@ const TierListPage = () => {
       .then((data) => setBooks(data.filter((b) => b.status === "read")))
       .catch(() => setError("Błąd pobierania książek"));
   }, []);
+
+  useEffect(() => {
+    if (id) {
+      setListId(id);
+      getTierList(id)
+        .then((data) => {
+          setName(data.name);
+          setTiers(data.tiers);
+        })
+        .catch(() => setError("Błąd pobierania listy"));
+    }
+  }, [id]);
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -57,7 +71,7 @@ const TierListPage = () => {
 
   const save = async () => {
     try {
-      await updateTierList(listId, tiers);
+      await updateTierList(listId, { name: name.trim(), tiers });
       setError("");
     } catch (err) {
       setError("Błąd zapisu");
@@ -66,29 +80,37 @@ const TierListPage = () => {
 
   return (
     <div>
-      <h2>Nowa Tier Lista</h2>
+      <h2>{listId ? "Edytuj Tier Listę" : "Nowa Tier Lista"}</h2>
       {error && <p className={styles.error}>{error}</p>}
-      {!listId ? (
-        <form onSubmit={handleCreate} className={styles.field}>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Nazwa listy"
-            className={styles.fullWidth}
-            required
-          />
-          <button type="submit" className={styles.button}>
-            Utwórz
-          </button>
-        </form>
-      ) : (
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!name.trim()) {
+            setError("Podaj nazwę listy");
+            return;
+          }
+          if (listId) {
+            save();
+          } else {
+            handleCreate(e);
+          }
+        }}
+        className={styles.field}
+      >
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Nazwa listy"
+          className={styles.fullWidth}
+          required
+        />
+        <button type="submit" className={styles.button}>
+          {listId ? "Zapisz listę" : "Utwórz"}
+        </button>
+      </form>
+      {listId && (
         <>
-          <div className={styles.field}>
-            <button onClick={save} className={styles.button}>
-              Zapisz listę
-            </button>
-          </div>
           <div onDragOver={handlePageDragOver}>
             {tiers.map((t) => (
               <div key={t.label} className={styles.row}>
