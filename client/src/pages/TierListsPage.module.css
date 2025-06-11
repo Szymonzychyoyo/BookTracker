@@ -87,6 +87,23 @@
   margin-right: 0.5rem;
 }
 
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deleteButton {
+  background: transparent;
+  border: none;
+  color: #ff5252;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  text-decoration: underline;
+}
+
 .button {
   display: inline-block;
   text-decoration: none;

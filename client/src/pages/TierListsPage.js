@@ -1,12 +1,21 @@
 // TierListsPage.jsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getTierLists } from "../api/tierListAPI";
+import { getTierLists, deleteTierList } from "../api/tierListAPI";
 import styles from "./TierListsPage.module.css";
 
 const TierListsPage = () => {
   const [lists, setLists] = useState([]);
   const [error, setError] = useState("");
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteTierList(id);
+      setLists((prev) => prev.filter((l) => l._id !== id));
+    } catch (err) {
+      setError("Błąd usuwania listy");
+    }
+  };
 
   useEffect(() => {
     getTierLists()
@@ -24,7 +33,15 @@ const TierListsPage = () => {
       <ul className={styles.list}>
         {lists.map((l) => (
           <li key={l._id} className={styles.listItem}>
-            <strong>{l.name}</strong>
+            <div className={styles.listHeader}>
+              <strong>{l.name}</strong>
+              <button
+                onClick={() => handleDelete(l._id)}
+                className={styles.deleteButton}
+              >
+                Usuń
+              </button>
+            </div>
             <ul className={styles.tierList}>
               {l.tiers.map((t) => (
                 <li key={t.label} className={styles.tierItem}>

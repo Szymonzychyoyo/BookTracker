@@ -2,7 +2,12 @@ const express = require('express');
 const { body } = require('express-validator');
 const router = express.Router();
 const { protect } = require('../middlewares/authMiddleware');
-const { createTierList, updateTierList, getTierLists } = require('../controllers/tierListController');
+const {
+  createTierList,
+  updateTierList,
+  getTierLists,
+  deleteTierList
+} = require('../controllers/tierListController');
 
 router.post(
   '/',
@@ -18,5 +23,7 @@ router.patch(
   body('tiers').isArray().withMessage('Tiers must be array'),
   updateTierList
 );
+
+router.delete('/:id', protect, deleteTierList);
 
 module.exports = router;
