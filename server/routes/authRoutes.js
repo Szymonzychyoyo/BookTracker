@@ -7,7 +7,7 @@ const {
   login,
   updateProfile,
   deleteProfile,
-  updateAvatar   // ← import
+  updateAvatar   
 } = require('../controllers/authController');
 
 router.post('/register', register);

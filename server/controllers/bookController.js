@@ -54,9 +54,6 @@ const createBook = async (req, res) => {
 };
 
 
-// @desc    Zaktualizuj status książki (to-read ↔ read)
-// @route   PATCH /api/books/:id
-// @access  Private
 const updateBookStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -86,9 +83,7 @@ const updateBookStatus = async (req, res) => {
   }
 };
 
-// @desc    Usuń książkę
-// @route   DELETE /api/books/:id
-// @access  Private
+
 const deleteBook = async (req, res) => {
   try {
     const { id } = req.params;
