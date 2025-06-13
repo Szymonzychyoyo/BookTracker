@@ -23,7 +23,7 @@ This command will build the images and start MongoDB, the backend and the React 
 
 ```bash
 cd server
-cp .env  # adjust values if needed
+copy envExample .env
 npm install
 npm start
 ```
