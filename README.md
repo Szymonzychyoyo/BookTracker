@@ -16,7 +16,7 @@ Aplikacja do śledzenia przeczytanych książek oparta na api Open library – f
 
 ## 🚀 Szybki start z Dockerem
 
-Upewnij się, że masz zainstalowane **Docker** 🐳 i **Docker Compose**, a następnie uruchom:
+Upewnij się, że masz zainstalowane **Docker** 🐳, **Docker Compose** i w razie potrzeby włączony Docker Desktop a następnie uruchom:
 
 ```bash
 docker-compose up --build
