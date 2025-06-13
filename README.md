@@ -1,6 +1,14 @@
 # 📚 BookTrackerPL
 
-Aplikacja do śledzenia przeczytanych książek – frontend w React, backend w Node.js + MongoDB.
+Aplikacja do śledzenia przeczytanych książek oparta na api Open library – frontend w React, backend w Node.js + MongoDB.
+
+---
+
+## ✨ Funkcjonalności:
+-Zapisywanie przeczytanych książek oraz książek do przeczytania
+-Wyświetlanie szczegółów książki
+-Wyświetlanie innych dzieł autora
+-Tworzenie tierlist przeczytanych książek
 
 ---
 
