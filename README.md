@@ -75,7 +75,11 @@ Aplikacja frontendowa uruchomi się domyślnie na [http://localhost:3000](http:/
 
 Zrzuty ekranu:
 ![img_alt](client/public/ZrzutyEkranu/1.png)
+
 ![img_alt](client/public/ZrzutyEkranu/2.png)
+
 ![img_alt](client/public/ZrzutyEkranu/4.png)
+
 ![img_alt](client/public/ZrzutyEkranu/5.png)
+
 ![img_alt](client/public/ZrzutyEkranu/6.png)
