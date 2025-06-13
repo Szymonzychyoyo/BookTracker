@@ -1,13 +1,9 @@
-# -----------------------------
-#  Node.js
-# -----------------------------
-
 # Ignoruj katalogi node_modules w całym projekcie
-node_modules/
+**/node_modules/
 
 # Ignoruj pliki środowiskowe
-.env
-.env.*
+**/.env
+**/.env.*
 # (np. .env.local, .env.development, .env.production itp.)
 
 # Ignoruj pliki logów
@@ -57,8 +53,5 @@ coverage/
 # Ignoruj folder cache
 .cache/
 
-# Ignoruj pliki lock specifc do CI/CD (jeśli nie chcesz ich commitować)
-# np. pamiętaj, że package-lock.json czy yarn.lock warto raczej trzymać w repo,
-# ale jeśli z jakiegoś powodu chcesz je pominąć, odkomentuj poniższe:
-# package-lock.json
-# yarn.lock
+# Ignoruj przesłane pliki
+server/uploads/

@@ -1,13 +1,39 @@
 # BookTrackerPL
 
-This repository contains a client built with React and a Node.js backend.
+This repository contains a React client and a Node.js backend.
 
-## Running with Docker
+## Quick start with Docker
 
-Make sure you have Docker and Docker Compose installed. Then run:
+Ensure you have Docker and Docker Compose installed, then run:
 
 ```bash
 docker-compose up --build
 ```
 
-The React application will be available at `http://localhost:3000` and the backend API at `http://localhost:5001`.
+This command will build the images and start MongoDB, the backend and the React application. The client will be available at [http://localhost:3000](http://localhost:3000) and the API at [http://localhost:5001](http://localhost:5001).
+
+## Manual setup
+
+### Prerequisites
+
+- Node.js 18 or newer
+- Running MongoDB instance (local or Docker)
+
+### Backend
+
+```bash
+cd server
+cp .env  # adjust values if needed
+npm install
+npm start
+```
+
+The server uses the variables `PORT`, `MONGODB_URI` and `JWT_SECRET` from the `.env` file.
+
+### Frontend
+
+```bash
+cd client
+npm install
+npm start
+```
