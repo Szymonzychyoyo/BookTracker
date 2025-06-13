@@ -4,11 +4,13 @@ Aplikacja do śledzenia przeczytanych książek oparta na api Open library – f
 
 ---
 
-## ✨ Funkcjonalności:
--Zapisywanie przeczytanych książek oraz książek do przeczytania
--Wyświetlanie szczegółów książki
--Wyświetlanie innych dzieł autora
--Tworzenie tierlist przeczytanych książek
+## ✨ Funkcjonalności
+
+- Zapisywanie przeczytanych książek oraz książek do przeczytania
+- Wyświetlanie szczegółów książki
+- Wyświetlanie innych dzieł autora
+- Tworzenie tierlist przeczytanych książek
+
 
 ---
 
