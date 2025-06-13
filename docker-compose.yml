@@ -1,0 +1,29 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+  server:
+    build: ./server
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - MONGODB_URI=mongodb://mongo:27017/ProjektKoncowy
+      - JWT_SECRET=twoj_super_tajny_klucz
+    volumes:
+      - ./server/uploads:/usr/src/app/uploads
+      - ./server/brakOkladki:/usr/src/app/brakOkladki
+    depends_on:
+      - mongo
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+volumes:
+  mongo-data:
