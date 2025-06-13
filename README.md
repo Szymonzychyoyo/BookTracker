@@ -1,39 +1,54 @@
-# BookTrackerPL
+📚 BookTrackerPL
+Aplikacja do śledzenia przeczytanych książek – frontend w React, backend w Node.js + MongoDB.
 
-This repository contains a React client and a Node.js backend.
+🚀 Szybki start z Dockerem
+Upewnij się, że masz zainstalowane Docker 🐳 i Docker Compose, a następnie uruchom:
 
-## Quick start with Docker
-
-Ensure you have Docker and Docker Compose installed, then run:
-
-```bash
+bash
+Kopiuj
+Edytuj
 docker-compose up --build
-```
+✅ To polecenie:
 
-This command will build the images and start MongoDB, the backend and the React application. The client will be available at [http://localhost:3000](http://localhost:3000) and the API at [http://localhost:5001](http://localhost:5001).
+buduje obrazy Dockera
 
-## Manual setup
+uruchamia MongoDB, backend i frontend
 
-### Prerequisites
+🌐 Aplikacja będzie dostępna pod adresami:
 
-- Node.js 18 or newer
-- Running MongoDB instance (local or Docker)
+Frontend: http://localhost:3000
 
-### Backend
+API (backend): http://localhost:5001
 
-```bash
+🛠️ Ręczna instalacja
+📋 Wymagania
+Node.js 18+ 🟢
+
+Działająca instancja MongoDB 🗃️ (lokalnie lub przez Docker)
+
+🔧 Backend
+bash
+Kopiuj
+Edytuj
 cd server
 copy envExample .env
 npm install
 npm start
-```
+📄 Plik .env powinien zawierać:
 
-The server uses the variables `PORT`, `MONGODB_URI` and `JWT_SECRET` from the `.env` file.
+PORT – port serwera (np. 5001)
 
-### Frontend
+MONGODB_URI – adres MongoDB
 
-```bash
+JWT_SECRET – sekret JWT do autoryzacji 🔐
+
+💻 Frontend
+bash
+Kopiuj
+Edytuj
 cd client
 npm install
 npm start
-```
+Aplikacja frontendowa uruchomi się domyślnie na http://localhost:3000 🌍
+
+📌 Wskazówka: Możesz używać aplikacji z Dockerem lub ręcznie – wybierz, co wolisz!
