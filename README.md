@@ -62,3 +62,6 @@ Aplikacja frontendowa uruchomi się domyślnie na [http://localhost:3000](http:/
 ---
 
 📌 **Wskazówka**: Możesz używać aplikacji z Dockerem lub ręcznie – wybierz, co wolisz!
+
+Zrzuty ekranu:
+![img_alt]([https://github.com/Szymonzychyoyo/DrinkingRecipeApp/blob/9540a8aa84a173d969de54a0034e2a3bfaa0db0a/public/sceenshots/Dashboard.png](https://github.com/Szymonzychyoyo/BookTracker/blob/main/client/public/ZrzutyEkranu/1.png?raw=true))
