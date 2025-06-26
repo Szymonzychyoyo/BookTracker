@@ -1,4 +1,4 @@
-# 📚 BookTrackerPL
+# 📚 BookTracker
 
 Aplikacja do śledzenia przeczytanych książek oparta na api Open library – frontend w React, backend w Node.js + MongoDB.
 
@@ -19,6 +19,8 @@ Aplikacja do śledzenia przeczytanych książek oparta na api Open library – f
 Upewnij się, że masz zainstalowane **Docker** 🐳, **Docker Compose** i w razie potrzeby włączony Docker Desktop a następnie uruchom:
 
 ```bash
+git clone https://github.com/Szymonzychyoyo/BookTracker.git
+cd .\BookTracker\
 docker-compose up --build
 ```
 
